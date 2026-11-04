@@ -21,3 +21,11 @@ Un dato nuevo entra en una fuente → se normaliza el email y se vincula a un `c
 ## Google Sheet del equipo
 
 Copia en Google Sheets (configuración regional Estados Unidos, fórmulas verificadas): https://docs.google.com/spreadsheets/d/1DMdDl5t8pUfQlY7Ou_Jd_iYmEJxk70jabTpBzjhWMkg/edit
+
+## Web pública (GitHub Pages)
+
+- Inicio: https://guillermoesp.github.io/crm-hackathon-eae/
+- App: https://guillermoesp.github.io/crm-hackathon-eae/app/
+- Guía y guion: https://guillermoesp.github.io/crm-hackathon-eae/docs/guia.html
+
+Cada `git push` a `main` vuelve a publicar la web en uno o dos minutos.
