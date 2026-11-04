@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CRM Verdelia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F2;--surface:#FFFFFF;--surface-2:#E9EFE9;--ink:#1C2822;--muted:#5C6963;--line:#D3DBD3;--accent:#1F5F5B;--accent-ink:#FFFFFF;--accent-soft:#DAEBE6;--raw:#8A6A3F;--raw-soft:#F1E8DA;
+--font-display:"Fraunces",Georgia,serif;--font-body:"Source Sans 3","Helvetica Neue",Arial,sans-serif;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121917;--surface:#1A2320;--surface-2:#222E29;--ink:#E4ECE6;--muted:#98A79F;--line:#2C3A33;--accent:#72C4B6;--accent-ink:#0F1F1C;--accent-soft:#1E3A36;--raw:#D1B07C;--raw-soft:#33291B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121917;--surface:#1A2320;--surface-2:#222E29;--ink:#E4ECE6;--muted:#98A79F;--line:#2C3A33;--accent:#72C4B6;--accent-ink:#0F1F1C;--accent-soft:#1E3A36;--raw:#D1B07C;--raw-soft:#33291B;color-scheme:dark}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto;padding:48px 16px 60px}
+h1{font-family:var(--font-display);font-size:2.4rem;margin:0 0 6px;line-height:1.1;text-wrap:balance}
+.lead{color:var(--muted);max-width:60ch;margin:0 0 28px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600;background:var(--raw-soft);color:var(--raw);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+a.card{display:block;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+a.card:hover,a.card:focus-visible{border-color:var(--accent);outline:none}
+a.card b{font-family:var(--font-display);font-size:1.2rem;display:block;margin-bottom:4px}
+a.card span{color:var(--muted);font-size:.95rem}
+a.card.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)} a.card.primary span{color:var(--accent-ink);opacity:.85}
+.flow{margin:34px 0 0;padding:16px 18px;background:var(--surface-2);border-radius:12px;font-size:.95rem}
+.flow b{font-family:var(--font-display)}
+footer{color:var(--muted);font-size:.85rem;margin-top:34px}
+</style>
+</head>
+<body><div class="wrap">
+<span class="tag">Hackathon CRM Data Driven · EAE</span>
+<h1>CRM Verdelia</h1>
+<p class="lead">Tienda online ficticia de cosmética natural. Un solo problema: recuperar clientes inactivos. Un CRM mínimo para seguir un dato desde la fuente hasta la acción y su resultado.</p>
+<div class="grid">
+  <a class="card primary" href="app/"><b>Abrir la app</b><span>Recorrido del dato en cinco pasos, ficha 360, regla y las dos historias guiadas.</span></a>
+  <a class="card" href="docs/guia.html"><b>Guía del reto y guion del vídeo</b><span>Caso, arquitectura, diccionario de datos, regla, historias, limitaciones y rúbrica.</span></a>
+  <a class="card" href="https://docs.google.com/spreadsheets/d/1DMdDl5t8pUfQlY7Ou_Jd_iYmEJxk70jabTpBzjhWMkg/edit"><b>Google Sheet</b><span>La hoja del equipo: capas RAW y warehouse, REGLA con fórmulas y FICHA_360. Pedid acceso si no se abre.</span></a>
+  <a class="card" href="crm_verdelia.xlsx"><b>Descargar crm_verdelia.xlsx</b><span>La misma hoja para abrir en local o reimportar.</span></a>
+</div>
+<div class="flow"><b>El flujo en una frase.</b> Un dato nuevo entra en una fuente → se normaliza el email y se vincula a un contact_id → la regla recalcula segmento, score y recomendación → una persona decide y registra la acción → el resultado vuelve al CRM y la regla se recalcula.</div>
+<footer>Todos los nombres, correos y pedidos son inventados. Código y datos en <a href="https://github.com/GuillermoEsp/crm-hackathon-eae">GitHub</a>.</footer>
+</div></body></html>

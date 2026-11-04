@@ -1,0 +1,13 @@
+event_ts,recipient,campaign,event_type
+2026-07-05T09:30:00Z,Pablo.Nunez@Ejemplo.es,Campaña Verano 2026,clic
+2026-07-06T09:30:00Z,lucia.ferrer@ejemplo.es,Campaña Verano 2026,abierto
+2026-07-08T09:30:00Z,nerea.alonso@ejemplo.es,Campaña Verano 2026,abierto
+2026-07-31T09:30:00Z,tomas.gil@ejemplo.es,Campaña Verano 2026,abierto
+2026-08-20T09:30:00Z,jorge.pardo@ejemplo.es,Campaña genérica Q3,enviado
+2026-08-20T09:30:00Z,Pablo.Nunez@Ejemplo.es,Recordatorio reposición,enviado
+2026-10-18T09:30:00Z,lucia.ferrer@ejemplo.es,Campaña Otoño 2026,enviado
+2026-10-18T09:30:00Z,Marcos.Vidal@ejemplo.es,Campaña Otoño 2026,enviado
+2026-10-18T09:30:00Z,carla.ibanez@ejemplo.es,Campaña Otoño 2026,enviado
+2026-10-19T09:30:00Z,aina.roca@ejemplo.es,Campaña Otoño 2026,clic
+2026-10-20T09:30:00Z,Pablo.Nunez@Ejemplo.es,Campaña Otoño 2026,abierto
+2026-10-28T09:30:00Z,nerea.alonso@ejemplo.es,Campaña Otoño 2026,abierto

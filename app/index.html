@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verdelia CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Tienda de cosmética natural: verdes fríos, acento teal profundo, un ámbar y un rojo arcilla solo para estados. */
+  --bg:#F3F6F2; --surface:#FFFFFF; --surface-2:#E9EFE9; --ink:#1C2822; --muted:#5C6963; --line:#D3DBD3;
+  --accent:#1F5F5B; --accent-ink:#FFFFFF; --accent-soft:#DAEBE6;
+  --good:#2F7A44; --good-soft:#DDF0E0; --warn:#A8701A; --warn-soft:#F7EAD0; --crit:#B23A2E; --crit-soft:#F6DEDA; --raw:#8A6A3F; --raw-soft:#F1E8DA;
+  --font-display:"Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:"Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  /* Layout: una columna de 1180px; cada sección es un paso del recorrido del dato, numerado. */
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121917; --surface:#1A2320; --surface-2:#222E29; --ink:#E4ECE6; --muted:#98A79F; --line:#2C3A33;
+    --accent:#72C4B6; --accent-ink:#0F1F1C; --accent-soft:#1E3A36;
+    --good:#7CCB8A; --good-soft:#1E3524; --warn:#E0B060; --warn-soft:#3A2E16; --crit:#F08A7C; --crit-soft:#3E201C; --raw:#D1B07C; --raw-soft:#33291B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121917; --surface:#1A2320; --surface-2:#222E29; --ink:#E4ECE6; --muted:#98A79F; --line:#2C3A33;
+  --accent:#72C4B6; --accent-ink:#0F1F1C; --accent-soft:#1E3A36;
+  --good:#7CCB8A; --good-soft:#1E3524; --warn:#E0B060; --warn-soft:#3A2E16; --crit:#F08A7C; --crit-soft:#3E201C; --raw:#D1B07C; --raw-soft:#33291B;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;text-wrap:balance;margin:0}
+h1{font-size:2rem;line-height:1.1}
+h2{font-size:1.45rem}
+h3{font-size:1.1rem}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{padding:28px 0 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.top .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
+.brand small{display:block;color:var(--muted);font-size:.95rem;margin-top:4px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem;color:var(--muted)}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.crit{background:var(--crit-soft);color:var(--crit);border-color:transparent}
+.pill.accent{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.pill.raw{background:var(--raw-soft);color:var(--raw);border-color:transparent}
+.pill.muted{color:var(--muted)}
+/* flujo */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:20px 0 8px}
+.flow a{display:block;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;position:relative}
+.flow a:hover,.flow a:focus-visible{border-color:var(--accent);outline:none}
+.flow a .n{font-family:var(--font-display);font-size:1.5rem;color:var(--accent);line-height:1}
+.flow a .t{font-weight:700;display:block;margin-top:4px}
+.flow a .d{color:var(--muted);font-size:.85rem;display:block}
+.flow a .c{position:absolute;top:10px;right:12px;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:860px){.flow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.flow{grid-template-columns:1fr}}
+/* secciones */
+section.step{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;margin:22px 0}
+.step-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.step-head .n{font-family:var(--font-display);font-size:2.2rem;line-height:1;color:var(--accent);min-width:40px}
+.step-head p{color:var(--muted);max-width:68ch;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tabs button{font:inherit;font-size:.9rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+th{background:var(--surface-2);font-weight:600;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.wrapcell{white-space:normal;min-width:220px}
+tr.new td{background:var(--warn-soft)}
+tr.sel td{background:var(--accent-soft)}
+tr.clickable{cursor:pointer}
+.note{font-size:.9rem;color:var(--muted);margin:8px 0}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem}
+button.btn{font:inherit;font-weight:600;padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button.btn.secondary{background:var(--surface);color:var(--accent)}
+button.btn:disabled{opacity:.5;cursor:default}
+button.btn:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);font-weight:600}
+label.f select,label.f input,label.f textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:180px}
+label.f textarea{min-height:90px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem}
+/* identidad */
+.ident{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;background:var(--surface-2);border-radius:10px;padding:14px}
+.ident .arrow{font-size:1.4rem;color:var(--muted);text-align:center}
+.ident .box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px}
+.ident .box small{display:block;color:var(--muted);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+@media (max-width:860px){.ident{grid-template-columns:1fr}.ident .arrow{transform:rotate(90deg)}}
+/* ficha */
+.ficha{display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media (max-width:900px){.ficha{grid-template-columns:1fr}}
+.card{background:var(--surface-2);border-radius:10px;padding:14px}
+.card h3{margin-bottom:8px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.92rem}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--surface-2);border-radius:10px;padding:10px 12px;border-left:4px solid var(--line)}
+.kpi.good{border-left-color:var(--good)} .kpi.warn{border-left-color:var(--warn)} .kpi.crit{border-left-color:var(--crit)} .kpi.accent{border-left-color:var(--accent)}
+.kpi small{display:block;color:var(--muted);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.kpi b{font-family:var(--font-display);font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
+.reco{border:2px solid var(--accent);border-radius:10px;padding:14px;margin-bottom:14px;background:var(--surface)}
+.reco .why{font-size:.9rem;color:var(--muted);margin-top:6px}
+.reco .why li{margin:2px 0}
+.timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);margin-left:8px}
+.timeline li{position:relative;padding:4px 0 10px 18px;font-size:.92rem}
+.timeline li::before{content:"";position:absolute;left:-7px;top:11px;width:12px;height:12px;border-radius:50%;background:var(--muted);border:2px solid var(--surface)}
+.timeline li.t-pedido::before{background:var(--good)} .timeline li.t-inter::before{background:var(--accent)} .timeline li.t-ticket::before{background:var(--crit)} .timeline li.t-accion::before{background:var(--warn)}
+.timeline li.new{background:var(--warn-soft);border-radius:6px}
+.timeline .d{color:var(--muted);font-variant-numeric:tabular-nums;margin-right:8px}
+form.inline{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:10px}
+/* historias */
+.story{background:var(--surface-2);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.story ol{margin:0;padding-left:20px;font-size:.92rem}
+.story ol li{margin:3px 0;color:var(--muted)}
+.story ol li.done{color:var(--ink)} .story ol li.cur{color:var(--ink);font-weight:700}
+.story .ctl{display:flex;gap:8px;flex-wrap:wrap}
+.story .out{font-size:.9rem;background:var(--surface);border-radius:8px;padding:10px;min-height:44px;border:1px solid var(--line)}
+/* log */
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.log li{background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:.88rem;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+.log li .tsv{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:var(--muted);white-space:pre-wrap;word-break:break-all;margin-top:4px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.diff{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--surface);border:1px dashed var(--line);border-radius:8px;padding:10px;margin:10px 0;font-size:.9rem}
+.diff b{font-family:var(--font-display);font-size:1.3rem}
+.limits{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.limits{grid-template-columns:1fr}}
+.limits ul{margin:6px 0 0;padding-left:20px;font-size:.92rem}
+footer{color:var(--muted);font-size:.85rem;padding:10px 0 40px}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Verdelia CRM</h1>
+      <small>Tienda online de cosmética natural (ficticia). Un solo problema: recuperar clientes inactivos.</small>
+    </div>
+    <div class="meta">
+      <span>Fecha de referencia</span><span class="pill" id="fechaRefPill"></span>
+      <span class="pill raw">Datos ficticios</span>
+      <button class="btn secondary" id="btnReset" type="button">Reiniciar datos de ejemplo</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="flow" aria-label="Recorrido del dato">
+    <a href="#captura"><span class="n">1</span><span class="t">Captura</span><span class="d">Fuentes tal cual (Data Lake)</span><span class="c" id="cRaw"></span></a>
+    <a href="#identificacion"><span class="n">2</span><span class="t">Identificación</span><span class="d">Un contact_id por cliente</span><span class="c" id="cWh"></span></a>
+    <a href="#interpretacion"><span class="n">3</span><span class="t">Interpretación</span><span class="d">Regla: segmento y score</span><span class="c" id="cRule"></span></a>
+    <a href="#activacion"><span class="n">4</span><span class="t">Activación</span><span class="d">Ficha 360, decisión y acción</span><span class="c" id="cAcc"></span></a>
+    <a href="#resultado"><span class="n">5</span><span class="t">Resultado</span><span class="d">Vuelve al CRM y cierra el ciclo</span><span class="c" id="cRes"></span></a>
+  </nav>
+  <p class="note">La decisión que apoya este CRM: <strong>a qué clientes inactivos contactamos esta semana, con qué oferta y por qué canal</strong>. Y a cuáles no.</p>
+
+  <!-- 1 CAPTURA -->
+  <section class="step" id="captura">
+    <div class="step-head"><span class="n">1</span><div><h2>Captura: las fuentes, tal como llegan</h2>
+      <p>Cuatro sistemas escriben datos sobre la misma persona sin ponerse de acuerdo: la tienda usa fechas dd/mm/aaaa e importes con coma, el email marketing escribe timestamps, soporte deja espacios en los correos. Esta es la zona <em>raw</em> del Data Lake: no se modifica nada.</p></div></div>
+    <div class="tabs" id="rawTabs" role="tablist"></div>
+    <div class="note" id="rawNote"></div>
+    <div class="tbl" id="rawTable"></div>
+  </section>
+
+  <!-- 2 IDENTIFICACIÓN -->
+  <section class="step" id="identificacion">
+    <div class="step-head"><span class="n">2</span><div><h2>Identificación: cada registro, a su cliente</h2>
+      <p>El Data Warehouse normaliza el email (minúsculas, sin espacios), lo busca en la tabla de clientes y asigna el <span class="mono">contact_id</span>. A partir de aquí todas las tablas se relacionan por esa clave.</p></div></div>
+    <div class="ident">
+      <div class="box"><small>Dato en la fuente</small>
+        <label class="f" style="margin-top:6px"><span>Email tal como lo escribió el sistema</span><input id="identInput" type="text" value="Lucia.Ferrer@ejemplo.es" list="identList" autocomplete="off"><datalist id="identList"></datalist></label></div>
+      <div class="arrow">→</div>
+      <div class="box"><small>Normalización</small><div class="mono" id="identNorm" style="margin-top:8px"></div><div class="note">trim() + minúsculas</div></div>
+      <div class="arrow">→</div>
+      <div class="box"><small>Cliente en el CRM</small><div id="identOut" style="margin-top:8px"></div></div>
+    </div>
+    <div class="tabs" id="whTabs" role="tablist" style="margin-top:16px"></div>
+    <div class="note" id="whNote"></div>
+    <div class="tbl" id="whTable"></div>
+  </section>
+
+  <!-- 3 INTERPRETACIÓN -->
+  <section class="step" id="interpretacion">
+    <div class="step-head"><span class="n">3</span><div><h2>Interpretación: la regla ordena la semana</h2>
+      <p>Para cada cliente se calculan cuatro señales (días sin comprar, valor en 12 meses, si abrió un email hace poco, si tiene una incidencia abierta) más el consentimiento. De ahí sale un segmento, un score de 0 a 7 y una recomendación. La regla recomienda; una persona decide.</p></div></div>
+    <div class="toolbar">
+      <button class="btn" id="btnNuevoDato" type="button">Entra un dato nuevo: Lucía abre el email de Otoño</button>
+      <span class="note" id="nuevoDatoNote">Simula que la plataforma de email registra una apertura el 2 de noviembre. Observa qué cambia.</span>
+    </div>
+    <div id="diffCola"></div>
+    <div class="tbl" id="colaTable"></div>
+    <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">Cómo se calcula (misma lógica que la pestaña REGLA de la hoja)</summary>
+      <ul class="note" style="padding-left:20px">
+        <li><strong>Recencia</strong>: días desde la última compra. Activo ≤ 60 · En riesgo ≤ 90 · Inactivo ≤ 180 · Perdido > 180.</li>
+        <li><strong>Valor</strong>: suma de pedidos no devueltos en los últimos 365 días. Alto ≥ 150 € · Medio ≥ 60 € · Bajo.</li>
+        <li><strong>Engagement</strong>: abrió o hizo clic en un email en los últimos 30 días.</li>
+        <li><strong>Incidencia abierta</strong>: ticket de soporte sin resolver. Bloquea cualquier oferta.</li>
+        <li><strong>Score</strong> = recencia (Inactivo 3 · En riesgo 2 · Perdido 1 · Activo 0) + valor (Alto 3 · Medio 2 · Bajo 1) + 1 si engagement. Sin consentimiento → 0.</li>
+        <li><strong>Recomendación</strong>, en orden: sin consentimiento → no contactar · incidencia abierta → resolverla antes · Activo → nada · Inactivo + Alto → WhatsApp personal + cupón 15 % · Inactivo + Medio → email + cupón 10 % · Inactivo + Bajo → email sin cupón · En riesgo → recordatorio de reposición · Perdido → campaña genérica trimestral.</li>
+      </ul></details>
+  </section>
+
+  <!-- 4 ACTIVACIÓN -->
+  <section class="step" id="activacion">
+    <div class="step-head"><span class="n">4</span><div><h2>Activación: ficha 360, decisión y acción</h2>
+      <p>Todo lo que el CRM sabe de una persona, reunido por su <span class="mono">contact_id</span>: perfil, situación calculada, historial completo y la acción recomendada. Aquí la responsable decide y lo deja registrado.</p></div></div>
+    <div class="toolbar"><label class="f"><span>Cliente</span><select id="selCliente"></select></label></div>
+    <div class="ficha">
+      <div>
+        <div class="card" id="fichaPerfil"></div>
+        <div class="card" style="margin-top:12px" id="fichaAccion"></div>
+      </div>
+      <div>
+        <div class="kpis" id="fichaKpis"></div>
+        <div class="reco" id="fichaReco"></div>
+        <h3>Historial unificado</h3>
+        <ul class="timeline" id="fichaTimeline"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 RESULTADO -->
+  <section class="step" id="resultado">
+    <div class="step-head"><span class="n">5</span><div><h2>Resultado: el ciclo se cierra</h2>
+      <p>Lo que pasó después de la acción vuelve al CRM: una compra entra como transacción, un ticket se cierra, una baja retira el consentimiento. La regla se recalcula con ese dato y la próxima decisión ya lo tiene en cuenta.</p></div></div>
+    <div id="resultadoPanel"></div>
+    <h3 style="margin-top:16px">Registro de esta sesión</h3>
+    <p class="note">Cada fila nueva que genera la app aparece aquí lista para pegarla en la pestaña correspondiente de la hoja de Google Sheets (formato separado por tabuladores).</p>
+    <ul class="log" id="logList"></ul>
+  </section>
+
+  <!-- HISTORIAS -->
+  <section class="step" id="historias">
+    <div class="step-head"><span class="n">★</span><div><h2>Dos historias, dos respuestas distintas</h2>
+      <p>Guion paso a paso para la grabación. Cada botón ejecuta un paso real sobre los datos y lleva a la sección correspondiente.</p></div></div>
+    <div class="grid2" id="storyGrid"></div>
+  </section>
+
+  <!-- DATOS -->
+  <section class="step" id="datos">
+    <div class="step-head"><span class="n">⇄</span><div><h2>Datos: la hoja de cálculo es la fuente de verdad</h2>
+      <p>La app arranca con los datos de ejemplo embebidos. Para trabajar con la hoja del equipo, copia una pestaña entera de Google Sheets (Ctrl+A, Ctrl+C) y pégala aquí, o carga el CSV exportado. Los encabezados deben coincidir con los de las pestañas DIM_ y FACT_.</p></div></div>
+    <form class="inline" id="importForm">
+      <label class="f"><span>Tabla</span><select id="impTabla">
+        <option value="clientes">DIM_clientes</option><option value="transacciones">FACT_transacciones</option>
+        <option value="interacciones">FACT_interacciones</option><option value="incidencias">FACT_incidencias</option><option value="acciones">FACT_acciones</option></select></label>
+      <label class="f" style="flex:1;min-width:260px"><span>Pega aquí el contenido (TSV o CSV, con encabezados)</span><textarea id="impTexto"></textarea></label>
+      <label class="f"><span>o carga un archivo CSV</span><input id="impFile" type="file" accept=".csv,.tsv,.txt"></label>
+      <button class="btn" type="submit">Cargar en la app</button>
+    </form>
+    <p class="note" id="impMsg"></p>
+  </section>
+
+  <section class="step" id="limites">
+    <div class="step-head"><span class="n">!</span><div><h2>Limitaciones y siguiente mejora</h2></div></div>
+    <div class="limits">
+      <div><h3>Lo que este prototipo no hace</h3><ul>
+        <li>La identidad se resuelve solo por email. Dos personas con el mismo correo, o una con dos, se confunden.</li>
+        <li>Los umbrales de la regla (60/90/180 días, 150/60 €) están fijados a mano, no aprendidos de los datos.</li>
+        <li>Las acciones y los resultados se registran a mano: no hay conexión real con WhatsApp ni con la plataforma de email.</li>
+        <li>No mide si la acción causó la compra o si habría ocurrido igual (no hay grupo de control).</li>
+      </ul></div>
+      <div><h3>Siguiente mejora que haría el equipo</h3><ul>
+        <li>Cerrar el ciclo de forma automática: que un pedido nuevo en la tienda cierre solo la acción pendiente del cliente.</li>
+        <li>Guardar el resultado de cada acción para comparar tasas de respuesta por segmento y ajustar los umbrales cada trimestre.</li>
+        <li>Añadir una regla de "no insistir": tras dos acciones sin respuesta, pausar al cliente seis meses.</li>
+      </ul></div>
+    </div>
+  </section>
+  <footer>Hackathon CRM Data Driven · EAE · Todos los nombres, correos y pedidos son inventados. Hoja de cálculo complementaria: <span class="mono">crm_verdelia.xlsx</span>.</footer>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const DATA = {"fecha_referencia": "2026-11-04", "umbrales": {"activo_max": 60, "riesgo_max": 90, "inactivo_max": 180, "valor_alto": 150, "valor_medio": 60, "ventana_valor_dias": 365, "ventana_engagement_dias": 30}, "clientes": [{"contact_id": "C001", "nombre": "Lucía Ferrer", "email": "lucia.ferrer@ejemplo.es", "origen": "instagram", "fecha_alta": "2025-03-12", "consentimiento": "si"}, {"contact_id": "C002", "nombre": "Marcos Vidal", "email": "marcos.vidal@ejemplo.es", "origen": "google", "fecha_alta": "2025-06-02", "consentimiento": "si"}, {"contact_id": "C003", "nombre": "Elena Soto", "email": "elena.soto@ejemplo.es", "origen": "referido", "fecha_alta": "2025-09-20", "consentimiento": "no"}, {"contact_id": "C004", "nombre": "Jorge Pardo", "email": "jorge.pardo@ejemplo.es", "origen": "google", "fecha_alta": "2024-11-15", "consentimiento": "si"}, {"contact_id": "C005", "nombre": "Aina Roca", "email": "aina.roca@ejemplo.es", "origen": "instagram", "fecha_alta": "2026-01-10", "consentimiento": "si"}, {"contact_id": "C006", "nombre": "Pablo Núñez", "email": "pablo.nunez@ejemplo.es", "origen": "newsletter", "fecha_alta": "2025-02-05", "consentimiento": "si"}, {"contact_id": "C007", "nombre": "Carla Ibáñez", "email": "carla.ibanez@ejemplo.es", "origen": "instagram", "fecha_alta": "2025-05-30", "consentimiento": "si"}, {"contact_id": "C008", "nombre": "Tomás Gil", "email": "tomas.gil@ejemplo.es", "origen": "referido", "fecha_alta": "2025-08-08", "consentimiento": "si"}, {"contact_id": "C009", "nombre": "Nerea Alonso", "email": "nerea.alonso@ejemplo.es", "origen": "google", "fecha_alta": "2025-04-22", "consentimiento": "si"}, {"contact_id": "C010", "nombre": "Diego Mora", "email": "diego.mora@ejemplo.es", "origen": "instagram", "fecha_alta": "2026-02-14", "consentimiento": "si"}], "raw_email": {"C001": {"tienda": "Lucia.Ferrer@ejemplo.es", "email": "lucia.ferrer@ejemplo.es", "soporte": " lucia.ferrer@ejemplo.es"}, "C002": {"tienda": "marcos.vidal@ejemplo.es", "email": "Marcos.Vidal@ejemplo.es", "soporte": "marcos.vidal@ejemplo.es "}, "C003": {"tienda": "elena.soto@ejemplo.es", "email": "elena.soto@ejemplo.es", "soporte": "elena.soto@ejemplo.es"}, "C004": {"tienda": "JORGE.PARDO@ejemplo.es", "email": "jorge.pardo@ejemplo.es", "soporte": "jorge.pardo@ejemplo.es"}, "C005": {"tienda": "aina.roca@ejemplo.es", "email": "aina.roca@ejemplo.es", "soporte": "aina.roca@ejemplo.es"}, "C006": {"tienda": "pablo.nunez@ejemplo.es", "email": "Pablo.Nunez@Ejemplo.es", "soporte": "pablo.nunez@ejemplo.es"}, "C007": {"tienda": "carla.ibanez@ejemplo.es", "email": "carla.ibanez@ejemplo.es", "soporte": "carla.ibanez@ejemplo.es"}, "C008": {"tienda": "Tomas.Gil@ejemplo.es", "email": "tomas.gil@ejemplo.es", "soporte": "tomas.gil@ejemplo.es"}, "C009": {"tienda": "nerea.alonso@ejemplo.es", "email": "nerea.alonso@ejemplo.es", "soporte": "nerea.alonso@ejemplo.es"}, "C010": {"tienda": "diego.mora@ejemplo.es", "email": "diego.mora@ejemplo.es", "soporte": "Diego.Mora@ejemplo.es"}}, "transacciones": [{"transaccion_id": "P-1001", "contact_id": "C004", "fecha": "2025-01-20", "producto": "Champú sólido de romero", "importe": 24.0, "estado": "entregado"}, {"transaccion_id": "P-1003", "contact_id": "C001", "fecha": "2025-11-20", "producto": "Pack aceites esenciales", "importe": 62.0, "estado": "entregado"}, {"transaccion_id": "P-1004", "contact_id": "C006", "fecha": "2025-11-28", "producto": "Pack aceites esenciales", "importe": 71.0, "estado": "entregado"}, {"transaccion_id": "P-1005", "contact_id": "C004", "fecha": "2025-12-01", "producto": "Bálsamo labial de karité", "importe": 12.0, "estado": "entregado"}, {"transaccion_id": "P-1008", "contact_id": "C002", "fecha": "2026-01-15", "producto": "Champú sólido de romero", "importe": 24.0, "estado": "entregado"}, {"transaccion_id": "P-1011", "contact_id": "C001", "fecha": "2026-03-02", "producto": "Crema facial de caléndula", "importe": 58.0, "estado": "entregado"}, {"transaccion_id": "P-1012", "contact_id": "C007", "fecha": "2026-03-15", "producto": "Champú sólido de romero", "importe": 24.0, "estado": "entregado"}, {"transaccion_id": "P-1014", "contact_id": "C009", "fecha": "2026-03-28", "producto": "Bálsamo labial de karité", "importe": 12.0, "estado": "entregado"}, {"transaccion_id": "P-1016", "contact_id": "C006", "fecha": "2026-04-10", "producto": "Sérum de rosa mosqueta", "importe": 42.0, "estado": "entregado"}, {"transaccion_id": "P-1019", "contact_id": "C005", "fecha": "2026-05-05", "producto": "Sérum de rosa mosqueta", "importe": 42.0, "estado": "entregado"}, {"transaccion_id": "P-1020", "contact_id": "C010", "fecha": "2026-06-07", "producto": "Champú sólido de romero", "importe": 24.0, "estado": "entregado"}, {"transaccion_id": "P-1022", "contact_id": "C003", "fecha": "2026-06-10", "producto": "Crema corporal de almendra", "importe": 36.0, "estado": "entregado"}, {"transaccion_id": "P-1021", "contact_id": "C007", "fecha": "2026-06-27", "producto": "Pack regalo cosmética", "importe": 89.0, "estado": "entregado"}, {"transaccion_id": "P-1024", "contact_id": "C001", "fecha": "2026-07-17", "producto": "Pack regalo cosmética", "importe": 71.0, "estado": "entregado"}, {"transaccion_id": "P-1025", "contact_id": "C003", "fecha": "2026-07-20", "producto": "Jabones artesanales (x3)", "importe": 25.0, "estado": "entregado"}, {"transaccion_id": "P-1023", "contact_id": "C009", "fecha": "2026-07-27", "producto": "Jabones artesanales (x3)", "importe": 25.0, "estado": "entregado"}, {"transaccion_id": "P-1026", "contact_id": "C008", "fecha": "2026-07-30", "producto": "Crema facial de caléndula", "importe": 58.0, "estado": "entregado"}, {"transaccion_id": "P-1027", "contact_id": "C002", "fecha": "2026-08-01", "producto": "Pack regalo cosmética", "importe": 89.0, "estado": "en incidencia"}, {"transaccion_id": "P-1029", "contact_id": "C006", "fecha": "2026-08-26", "producto": "Crema facial de caléndula", "importe": 58.0, "estado": "entregado"}, {"transaccion_id": "P-1033", "contact_id": "C008", "fecha": "2026-09-20", "producto": "Jabones artesanales (x3)", "importe": 25.0, "estado": "entregado"}, {"transaccion_id": "P-1034", "contact_id": "C005", "fecha": "2026-10-15", "producto": "Crema facial de caléndula", "importe": 58.0, "estado": "entregado"}], "interacciones": [{"interaccion_id": "I-001", "contact_id": "C006", "fecha": "2026-04-12", "canal": "web", "evento": "resena_producto", "detalle": "Sérum de rosa mosqueta", "resultado": "4 estrellas", "fuente": "web"}, {"interaccion_id": "I-002", "contact_id": "C006", "fecha": "2026-07-05", "canal": "email", "evento": "email_clic", "detalle": "Campaña Verano 2026", "resultado": "clic en producto", "fuente": "email_marketing"}, {"interaccion_id": "I-003", "contact_id": "C001", "fecha": "2026-07-06", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Verano 2026", "resultado": "abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-004", "contact_id": "C009", "fecha": "2026-07-08", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Verano 2026", "resultado": "abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-005", "contact_id": "C008", "fecha": "2026-07-31", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Verano 2026", "resultado": "abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-006", "contact_id": "C004", "fecha": "2026-08-20", "canal": "email", "evento": "email_enviado", "detalle": "Campaña genérica Q3", "resultado": "no abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-007", "contact_id": "C006", "fecha": "2026-08-20", "canal": "email", "evento": "email_enviado", "detalle": "Recordatorio reposición", "resultado": "abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-008", "contact_id": "C008", "fecha": "2026-09-18", "canal": "web", "evento": "resena_producto", "detalle": "Crema facial de caléndula", "resultado": "5 estrellas", "fuente": "web"}, {"interaccion_id": "I-009", "contact_id": "C003", "fecha": "2026-09-21", "canal": "web", "evento": "baja_comunicaciones", "detalle": "Formulario de preferencias", "resultado": "consentimiento retirado", "fuente": "web"}, {"interaccion_id": "I-010", "contact_id": "C001", "fecha": "2026-10-18", "canal": "email", "evento": "email_enviado", "detalle": "Campaña Otoño 2026", "resultado": "pendiente", "fuente": "email_marketing"}, {"interaccion_id": "I-011", "contact_id": "C002", "fecha": "2026-10-18", "canal": "email", "evento": "email_enviado", "detalle": "Campaña Otoño 2026", "resultado": "no abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-012", "contact_id": "C007", "fecha": "2026-10-18", "canal": "email", "evento": "email_enviado", "detalle": "Campaña Otoño 2026", "resultado": "no abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-013", "contact_id": "C005", "fecha": "2026-10-19", "canal": "email", "evento": "email_clic", "detalle": "Campaña Otoño 2026", "resultado": "clic en producto", "fuente": "email_marketing"}, {"interaccion_id": "I-014", "contact_id": "C006", "fecha": "2026-10-20", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Otoño 2026", "resultado": "abierto", "fuente": "email_marketing"}, {"interaccion_id": "I-015", "contact_id": "C009", "fecha": "2026-10-28", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Otoño 2026", "resultado": "abierto", "fuente": "email_marketing"}], "interaccion_nueva": {"interaccion_id": "I-016", "contact_id": "C001", "fecha": "2026-11-02", "canal": "email", "evento": "email_abierto", "detalle": "Campaña Otoño 2026", "resultado": "abierto", "fuente": "email_marketing"}, "incidencias": [{"ticket_id": "T-301", "contact_id": "C004", "fecha_apertura": "2025-12-03", "motivo": "Pregunta sobre devolución", "estado": "resuelto", "fecha_cierre": "2025-12-04", "valoracion": 3, "pedido": "P-1005"}, {"ticket_id": "T-302", "contact_id": "C010", "fecha_apertura": "2026-06-09", "motivo": "Consulta estado del envío", "estado": "resuelto", "fecha_cierre": "2026-06-10", "valoracion": 5, "pedido": "P-1020"}, {"ticket_id": "T-303", "contact_id": "C002", "fecha_apertura": "2026-08-03", "motivo": "Pedido recibido con el envase roto", "estado": "abierto", "fecha_cierre": "", "valoracion": "", "pedido": "P-1027"}], "acciones": [{"accion_id": "A-001", "contact_id": "C006", "fecha": "2026-08-20", "segmento": "En riesgo / Alto", "prioridad": 5, "recomendacion": "Email recordatorio reposición (sin descuento)", "responsable": "Marketing", "estado": "cerrada", "resultado": "Compra P-1029 (58 €)", "fecha_resultado": "2026-08-26"}, {"accion_id": "A-002", "contact_id": "C004", "fecha": "2026-08-20", "segmento": "Perdido / Bajo", "prioridad": 2, "recomendacion": "Incluir en campaña genérica trimestral", "responsable": "Marketing", "estado": "cerrada", "resultado": "Sin respuesta", "fecha_resultado": "2026-09-20"}]};
+let S;
+const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur = (n) => new Intl.NumberFormat("es-ES", {style:"currency", currency:"EUR"}).format(n);
+const parseD = (s) => new Date(s + "T00:00:00");
+const diffDays = (a, b) => Math.round((parseD(a) - parseD(b)) / 86400000);
+const U = DATA.umbrales;
+
+function reset(){
+  S = JSON.parse(JSON.stringify({clientes:DATA.clientes, transacciones:DATA.transacciones, interacciones:DATA.interacciones, incidencias:DATA.incidencias, acciones:DATA.acciones}));
+  S.fechaRef = DATA.fecha_referencia; S.log = []; S.nuevos = new Set(); S.sel = "C001"; S.lastDiff = null;
+}
+
+// ---------- Regla (idéntica a scripts/generate_data.py y a la pestaña REGLA) ----------
+function evaluar(id){
+  const c = S.clientes.find(x => x.contact_id === id);
+  const compras = S.transacciones.filter(t => t.contact_id === id && t.estado !== "devuelto");
+  const ultima = compras.length ? compras.map(t => t.fecha).sort().at(-1) : null;
+  const dias = ultima ? diffDays(S.fechaRef, ultima) : 9999;
+  const valor = Math.round(compras.filter(t => diffDays(S.fechaRef, t.fecha) <= U.ventana_valor_dias).reduce((a, t) => a + Number(t.importe), 0) * 100) / 100;
+  const eng = S.interacciones.some(i => i.contact_id === id && (i.evento === "email_abierto" || i.evento === "email_clic") && diffDays(S.fechaRef, i.fecha) <= U.ventana_engagement_dias);
+  const inc = S.incidencias.some(i => i.contact_id === id && i.estado === "abierto");
+  const consent = String(c.consentimiento).toLowerCase() === "si";
+  const rec = dias <= U.activo_max ? "Activo" : dias <= U.riesgo_max ? "En riesgo" : dias <= U.inactivo_max ? "Inactivo" : "Perdido";
+  const val = valor >= U.valor_alto ? "Alto" : valor >= U.valor_medio ? "Medio" : "Bajo";
+  let score = {Activo:0, "En riesgo":2, Inactivo:3, Perdido:1}[rec] + {Alto:3, Medio:2, Bajo:1}[val] + (eng ? 1 : 0);
+  let reco, resp, why = [];
+  why.push(`Última compra ${ultima ? "hace " + dias + " días" : "nunca"} → <b>${rec}</b>`);
+  why.push(`Gasto 12 meses ${eur(valor)} → valor <b>${val}</b>`);
+  why.push(eng ? "Abrió o hizo clic en un email en los últimos 30 días → +1" : "Sin apertura de email reciente → +0");
+  if (!consent){ reco = "No contactar (sin consentimiento)"; resp = "Nadie"; score = 0; why.push("<b>Consentimiento retirado</b>: la regla no puede recomendar contacto"); }
+  else if (inc){ reco = "Resolver incidencia antes de ofertar"; resp = "Soporte"; why.push("<b>Ticket abierto</b>: cualquier oferta se bloquea hasta resolverlo"); }
+  else if (rec === "Activo"){ reco = "Ninguna acción"; resp = "Nadie"; }
+  else if (rec === "Inactivo" && val === "Alto"){ reco = "WhatsApp personal + cupón 15 %"; resp = "Atención al cliente"; }
+  else if (rec === "Inactivo" && val === "Medio"){ reco = "Email cupón 10 % + producto recomendado"; resp = "Marketing"; }
+  else if (rec === "Inactivo"){ reco = "Email producto recomendado (sin cupón)"; resp = "Marketing"; }
+  else if (rec === "En riesgo"){ reco = "Email recordatorio reposición (sin descuento)"; resp = "Marketing"; }
+  else { reco = "Incluir en campaña genérica trimestral"; resp = "Marketing"; }
+  return {contact_id:id, nombre:c.nombre, ultima, dias, valor, eng, inc, consent, rec, val, score, reco, resp, why};
+}
+const cola = () => S.clientes.map(c => evaluar(c.contact_id)).sort((a, b) => b.score - a.score || a.contact_id.localeCompare(b.contact_id));
+const normalizar = (e) => String(e || "").trim().toLowerCase();
+const resolver = (e) => S.clientes.find(c => normalizar(c.email) === normalizar(e)) || null;
+const nextId = (arr, key, prefix, width) => { const n = arr.reduce((m, r) => Math.max(m, parseInt(String(r[key]).replace(/\D/g, "") || "0", 10)), 0) + 1; return prefix + String(n).padStart(width, "0"); };
+const pillRec = (r) => `<span class="pill ${r === "Activo" ? "good" : r === "En riesgo" ? "warn" : "crit"}">${r}</span>`;
+const pillVal = (v) => `<span class="pill ${v === "Alto" ? "accent" : v === "Medio" ? "" : "muted"}">${v}</span>`;
+
+function log(tipo, texto, tabla, row){
+  const tsv = row ? Object.values(row).join("\t") : "";
+  S.log.unshift({tipo, texto, tabla, tsv});
+}
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2200); }
+
+// ---------- Render ----------
+function tableHTML(rows, opts = {}){
+  if (!rows.length) return '<p class="note" style="padding:10px">Sin filas.</p>';
+  const cols = Object.keys(rows[0]);
+  const wide = new Set(opts.wide || []);
+  return `<table><thead><tr>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => {
+    const cls = [opts.rowClass ? opts.rowClass(r) : ""].filter(Boolean).join(" ");
+    return `<tr class="${cls}" ${opts.rowAttr ? opts.rowAttr(r) : ""}>${cols.map(c => `<td class="${wide.has(c) ? "wrapcell" : ""}">${opts.fmt && opts.fmt[c] ? opts.fmt[c](r[c], r) : esc(r[c])}</td>`).join("")}</tr>`; }).join("")}</tbody></table>`;
+}
+
+const RAW = [
+  {k:"tienda_pedidos", t:"Tienda online", note:"order_date en dd/mm/aaaa, total_eur con coma decimal, customer_email con mayúsculas. Clave natural: el email.",
+   rows: () => DATA.transacciones.map(t => ({order_id:t.transaccion_id, customer_email:DATA.raw_email[t.contact_id].tienda, order_date:t.fecha.split("-").reverse().join("/"), product:t.producto, total_eur:Number(t.importe).toFixed(2).replace(".", ","), fulfillment_status:t.estado}))},
+  {k:"web_registros", t:"Registros web", note:"Alta de cuenta: utm_source dice de dónde vino y marketing_optin si aceptó comunicaciones. Es la fuente de DIM_clientes.",
+   rows: () => DATA.clientes.map(c => ({signup_ts:c.fecha_alta + "T10:00:00Z", email:DATA.raw_email[c.contact_id].tienda, first_name:c.nombre.split(" ")[0], last_name:c.nombre.split(" ")[1], utm_source:c.origen, marketing_optin:c.consentimiento === "si" ? "true" : "false"}))},
+  {k:"email_eventos", t:"Email marketing", note:"Un evento por fila: sent, abierto, clic. Timestamp ISO. El email a veces con mayúsculas.",
+   rows: () => DATA.interacciones.filter(i => i.fuente === "email_marketing").map(i => ({event_ts:i.fecha + "T09:30:00Z", recipient:DATA.raw_email[i.contact_id].email, campaign:i.detalle, event_type:i.evento.replace("email_", "")}))},
+  {k:"web_eventos", t:"Eventos web", note:"Reseñas de producto y formulario de preferencias (incluida la baja de comunicaciones).",
+   rows: () => DATA.interacciones.filter(i => i.fuente === "web").map(i => ({ts:i.fecha + "T18:05:00Z", user_email:DATA.raw_email[i.contact_id].tienda, event:i.evento, item:i.detalle, value:i.resultado}))},
+  {k:"soporte_tickets", t:"Soporte", note:"Tickets. requester_email con espacios al principio o al final: el sistema de soporte no los limpia.",
+   rows: () => DATA.incidencias.map(i => ({ticket_id:i.ticket_id, requester_email:JSON.stringify(DATA.raw_email[i.contact_id].soporte), created_at:i.fecha_apertura, subject:i.motivo, status:i.estado, closed_at:i.fecha_cierre, csat:i.valoracion, order_ref:i.pedido}))},
+];
+let rawSel = "tienda_pedidos";
+function renderRaw(){
+  $("#rawTabs").innerHTML = RAW.map(r => `<button type="button" role="tab" aria-selected="${r.k === rawSel}" data-k="${r.k}">${r.t}</button>`).join("");
+  const r = RAW.find(x => x.k === rawSel);
+  $("#rawNote").textContent = "RAW_" + r.k + " · " + r.note;
+  $("#rawTable").innerHTML = tableHTML(r.rows(), {wide:["subject", "product"]});
+  $("#cRaw").textContent = RAW.reduce((n, r) => n + r.rows().length, 0) + " filas";
+}
+
+const WH = [
+  {k:"clientes", t:"DIM_clientes", note:"Un cliente, una fila. contact_id es la clave de todo el CRM. Email ya normalizado."},
+  {k:"transacciones", t:"FACT_transacciones", note:"Pedidos con fecha ISO e importe numérico. Cada fila apunta a un contact_id."},
+  {k:"interacciones", t:"FACT_interacciones", note:"Email y web unificados en una sola tabla con canal, evento, resultado y fuente de origen."},
+  {k:"incidencias", t:"FACT_incidencias", note:"Tickets de soporte. Un ticket 'abierto' cambia la recomendación de la regla."},
+  {k:"acciones", t:"FACT_acciones", note:"Decisiones tomadas, quién las ejecuta y qué pasó después. Es donde el CRM aprende."},
+];
+let whSel = "clientes";
+function renderWh(){
+  $("#whTabs").innerHTML = WH.map(r => `<button type="button" role="tab" aria-selected="${r.k === whSel}" data-k="${r.k}">${r.t} <span class="mono">(${S[r.k].length})</span></button>`).join("");
+  const r = WH.find(x => x.k === whSel);
+  $("#whNote").textContent = r.note;
+  const idKey = {clientes:"contact_id", transacciones:"transaccion_id", interacciones:"interaccion_id", incidencias:"ticket_id", acciones:"accion_id"}[whSel];
+  $("#whTable").innerHTML = tableHTML(S[whSel], {wide:["motivo", "recomendacion", "resultado"], rowClass: (row) => S.nuevos.has(row[idKey]) ? "new" : (row.contact_id === S.sel ? "sel" : ""), fmt:{importe: (v) => eur(Number(v))}});
+  $("#cWh").textContent = S.clientes.length + " clientes";
+}
+
+function renderIdent(){
+  const v = $("#identInput").value;
+  const n = normalizar(v);
+  $("#identNorm").textContent = JSON.stringify(n);
+  const c = resolver(v);
+  $("#identOut").innerHTML = c ? `<span class="pill accent">${esc(c.contact_id)}</span> <strong>${esc(c.nombre)}</strong><div class="note">Se vincula a su historial: ${S.transacciones.filter(t => t.contact_id === c.contact_id).length} pedidos, ${S.interacciones.filter(t => t.contact_id === c.contact_id).length} interacciones.</div>`
+    : `<span class="pill crit">Sin coincidencia</span><div class="note">No existe en DIM_clientes. Se crearía un contact_id nuevo (${esc(nextId(S.clientes, "contact_id", "C", 3))}) tras comprobar que no es un duplicado.</div>`;
+  const variants = new Set(); Object.values(DATA.raw_email).forEach(o => Object.values(o).forEach(e => variants.add(e)));
+  $("#identList").innerHTML = [...variants].map(e => `<option value="${esc(e)}"></option>`).join("");
+}
+
+function renderCola(){
+  const rows = cola().map((r, i) => ({"#": i + 1, contact_id:r.contact_id, nombre:r.nombre, "días sin compra":r.dias === 9999 ? "—" : r.dias, "valor 12 m":r.valor, "email 30 d":r.eng ? "sí" : "no", "incidencia":r.inc ? "abierta" : "—", consentimiento:r.consent ? "sí" : "no", recencia:r.rec, valor:r.val, score:r.score, recomendación:r.reco, responsable:r.resp}));
+  $("#colaTable").innerHTML = tableHTML(rows, {wide:["recomendación"], rowClass: (r) => "clickable" + (r.contact_id === S.sel ? " sel" : ""), rowAttr: (r) => `data-id="${r.contact_id}" title="Abrir ficha"`,
+    fmt:{"valor 12 m": (v) => eur(v), recencia:pillRec, valor:pillVal, score: (v) => `<strong>${v}</strong>`, incidencia: (v) => v === "abierta" ? '<span class="pill crit">abierta</span>' : "—", consentimiento: (v) => v === "no" ? '<span class="pill crit">no</span>' : "sí", "email 30 d": (v) => v === "sí" ? '<span class="pill good">sí</span>' : "no"}});
+  const d = S.lastDiff;
+  $("#diffCola").innerHTML = d ? `<div class="diff"><div>${esc(d.quien)} antes<br><b>score ${d.antes.score}</b> · ${esc(d.antes.reco)}</div><div>→</div><div>${esc(d.quien)} después del dato nuevo<br><b>score ${d.despues.score}</b> · ${esc(d.despues.reco)} <span class="pill accent">posición ${d.pos}</span></div></div>` : "";
+  const q = cola();
+  $("#cRule").textContent = q.filter(r => r.reco !== "Ninguna acción" && r.reco.indexOf("No contactar") < 0).length + " con acción";
+  const yaAnadido = S.interacciones.some(i => i.interaccion_id === DATA.interaccion_nueva.interaccion_id);
+  $("#btnNuevoDato").disabled = yaAnadido;
+  $("#nuevoDatoNote").textContent = yaAnadido ? "Dato ya incorporado: la apertura del 2 de noviembre está en FACT_interacciones vinculada a C001." : "Simula que la plataforma de email registra una apertura el 2 de noviembre. Observa qué cambia.";
+}
+
+function renderFicha(){
+  const sel = $("#selCliente");
+  sel.innerHTML = S.clientes.map(c => `<option value="${esc(c.contact_id)}" ${c.contact_id === S.sel ? "selected" : ""}>${esc(c.contact_id)} · ${esc(c.nombre)}</option>`).join("");
+  const c = S.clientes.find(x => x.contact_id === S.sel);
+  const r = evaluar(S.sel);
+  $("#fichaPerfil").innerHTML = `<h3>${esc(c.nombre)} <span class="pill accent">${esc(c.contact_id)}</span></h3><dl class="kv">
+    <dt>Email</dt><dd class="mono">${esc(c.email)}</dd><dt>Origen</dt><dd>${esc(c.origen)}</dd><dt>Alta</dt><dd>${esc(c.fecha_alta)}</dd>
+    <dt>Consentimiento</dt><dd>${r.consent ? '<span class="pill good">sí</span>' : '<span class="pill crit">no</span>'}</dd>
+    <dt>Pedidos</dt><dd>${S.transacciones.filter(t => t.contact_id === S.sel).length}</dd><dt>Interacciones</dt><dd>${S.interacciones.filter(t => t.contact_id === S.sel).length}</dd>
+    <dt>Incidencias</dt><dd>${S.incidencias.filter(t => t.contact_id === S.sel).length}</dd><dt>Acciones</dt><dd>${S.acciones.filter(t => t.contact_id === S.sel).length}</dd></dl>`;
+  const kcls = r.rec === "Activo" ? "good" : r.rec === "En riesgo" ? "warn" : "crit";
+  $("#fichaKpis").innerHTML = `<div class="kpi ${kcls}"><small>Días sin comprar</small><b>${r.dias === 9999 ? "—" : r.dias}</b> ${pillRec(r.rec)}</div>
+    <div class="kpi accent"><small>Valor 12 meses</small><b>${eur(r.valor)}</b> ${pillVal(r.val)}</div>
+    <div class="kpi ${r.eng ? "good" : ""}"><small>Email últimos 30 d</small><b>${r.eng ? "sí" : "no"}</b></div>
+    <div class="kpi ${r.inc ? "crit" : ""}"><small>Incidencia abierta</small><b>${r.inc ? "sí" : "no"}</b></div>`;
+  $("#fichaReco").innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div><small style="color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:.78rem">Recomendación de la regla · score ${r.score}</small><h3>${esc(r.reco)}</h3></div><span class="pill">Responsable: ${esc(r.resp)}</span></div><ul class="why">${r.why.map(w => `<li>${w}</li>`).join("")}</ul>`;
+  // timeline
+  const ev = [];
+  S.transacciones.filter(t => t.contact_id === S.sel).forEach(t => ev.push({f:t.fecha, cls:"t-pedido", id:t.transaccion_id, h:`<strong>Pedido</strong> ${esc(t.producto)} · ${eur(Number(t.importe))} · ${esc(t.estado)} <span class="mono">${esc(t.transaccion_id)}</span>`}));
+  S.interacciones.filter(t => t.contact_id === S.sel).forEach(t => ev.push({f:t.fecha, cls:"t-inter", id:t.interaccion_id, h:`<strong>${esc(t.canal)}</strong> ${esc(t.evento)} · ${esc(t.detalle)} · ${esc(t.resultado)} <span class="pill raw">${esc(t.fuente)}</span>`}));
+  S.incidencias.filter(t => t.contact_id === S.sel).forEach(t => { ev.push({f:t.fecha_apertura, cls:"t-ticket", id:t.ticket_id, h:`<strong>Ticket abierto</strong> ${esc(t.motivo)} <span class="mono">${esc(t.ticket_id)}</span>`}); if (t.fecha_cierre) ev.push({f:t.fecha_cierre, cls:"t-ticket", id:t.ticket_id + "c", h:`<strong>Ticket resuelto</strong> ${esc(t.ticket_id)} · valoración ${esc(t.valoracion)}/5`}); });
+  S.acciones.filter(t => t.contact_id === S.sel).forEach(t => { ev.push({f:t.fecha, cls:"t-accion", id:t.accion_id, h:`<strong>Acción</strong> ${esc(t.recomendacion)} · ${esc(t.responsable)} · <span class="pill ${t.estado === "pendiente" ? "warn" : ""}">${esc(t.estado)}</span>`}); if (t.fecha_resultado) ev.push({f:t.fecha_resultado, cls:"t-accion", id:t.accion_id + "r", h:`<strong>Resultado</strong> ${esc(t.resultado)} <span class="mono">${esc(t.accion_id)}</span>`}); });
+  ev.sort((a, b) => b.f.localeCompare(a.f));
+  $("#fichaTimeline").innerHTML = ev.length ? ev.map(e => `<li class="${e.cls} ${S.nuevos.has(e.id) ? "new" : ""}"><span class="d">${esc(e.f)}</span>${e.h}</li>`).join("") : '<li>Sin historial.</li>';
+  // acción
+  const pend = S.acciones.filter(a => a.contact_id === S.sel && a.estado === "pendiente");
+  const puede = r.reco !== "Ninguna acción" && !r.reco.startsWith("No contactar");
+  $("#fichaAccion").innerHTML = `<h3>Decidir y registrar acción</h3>` + (puede ? `<form id="accForm" class="inline" style="flex-direction:column;align-items:stretch">
+      <label class="f"><span>Responsable</span><select name="resp">${["Atención al cliente", "Marketing", "Soporte"].map(x => `<option ${x === r.resp ? "selected" : ""}>${x}</option>`).join("")}</select></label>
+      <label class="f"><span>Acción (editable)</span><input name="accion" value="${esc(r.reco)}"></label>
+      <label class="f"><span>Nota de la decisión</span><input name="nota" placeholder="p. ej. la llamo yo el jueves"></label>
+      <button class="btn" type="submit">Registrar acción (pendiente)</button></form>`
+    : `<p class="note">La regla no propone acción para este cliente (${esc(r.reco)}). Puedes registrar una decisión manual si el equipo lo justifica.</p><button class="btn secondary" type="button" id="accManual">Registrar acción manual</button>`)
+    + (pend.length ? `<p class="note" style="margin-top:10px">${pend.length} acción(es) pendiente(s) de resultado. Regístralo en el paso 5.</p>` : "");
+  $("#cAcc").textContent = S.acciones.length + " acciones";
+}
+
+function renderResultado(){
+  const pend = S.acciones.filter(a => a.estado === "pendiente");
+  $("#cRes").textContent = S.acciones.filter(a => a.estado === "cerrada").length + " cerradas";
+  if (!pend.length){ $("#resultadoPanel").innerHTML = '<p class="note">No hay acciones pendientes. Registra una acción en el paso 4 y vuelve aquí para cerrar el ciclo.</p>'; return; }
+  $("#resultadoPanel").innerHTML = `<form class="inline" id="resForm">
+    <label class="f"><span>Acción pendiente</span><select name="accion">${pend.map(a => `<option value="${esc(a.accion_id)}">${esc(a.accion_id)} · ${esc(a.contact_id)} ${esc(S.clientes.find(c => c.contact_id === a.contact_id).nombre)} · ${esc(a.recomendacion)}</option>`).join("")}</select></label>
+    <label class="f"><span>Qué pasó</span><select name="tipo" id="resTipo"><option value="compra">Compra</option><option value="sin_respuesta">Sin respuesta</option><option value="ticket">Incidencia resuelta</option><option value="baja">Pide no recibir más comunicaciones</option></select></label>
+    <label class="f" data-for="compra"><span>Producto</span><select name="producto">${["Pack regalo cosmética", "Crema facial de caléndula", "Sérum de rosa mosqueta", "Pack aceites esenciales", "Champú sólido de romero", "Jabones artesanales (x3)"].map(p => `<option>${p}</option>`).join("")}</select></label>
+    <label class="f" data-for="compra"><span>Importe (€)</span><input name="importe" type="number" step="0.01" min="0" value="68"></label>
+    <label class="f" data-for="ticket"><span>Valoración (1-5)</span><input name="valoracion" type="number" min="1" max="5" value="4"></label>
+    <button class="btn" type="submit">Registrar resultado y recalcular</button></form>
+    <div id="resDiff"></div>`;
+  const upd = () => { const t = $("#resTipo").value; document.querySelectorAll("#resForm [data-for]").forEach(l => l.style.display = l.dataset.for === t ? "" : "none"); };
+  $("#resTipo").addEventListener("change", upd); upd();
+}
+
+function renderLog(){
+  $("#logList").innerHTML = S.log.length ? S.log.map((l, i) => `<li><div><span class="pill ${l.tipo === "captura" ? "raw" : l.tipo === "accion" ? "warn" : l.tipo === "resultado" ? "good" : "accent"}">${esc(l.tipo)}</span> ${l.texto}${l.tsv ? `<span class="tsv">${esc(l.tabla)} ← ${esc(l.tsv)}</span>` : ""}</div>${l.tsv ? `<button class="btn secondary" type="button" data-copy="${i}">Copiar fila</button>` : ""}</li>`).join("") : '<li><div class="note">Todavía no hay cambios. Prueba el botón del paso 3 o reproduce una historia.</div></li>';
+}
+
+function renderAll(){ $("#fechaRefPill").textContent = S.fechaRef; renderRaw(); renderIdent(); renderWh(); renderCola(); renderFicha(); renderResultado(); renderLog(); renderStories(); }
+
+// ---------- Acciones sobre el estado ----------
+function addNuevoDato(){
+  const n = DATA.interaccion_nueva;
+  if (S.interacciones.some(i => i.interaccion_id === n.interaccion_id)) return false;
+  const antes = evaluar(n.contact_id);
+  S.interacciones.push({...n}); S.nuevos.add(n.interaccion_id);
+  const despues = evaluar(n.contact_id);
+  S.lastDiff = {quien:despues.nombre, antes, despues, pos:cola().findIndex(r => r.contact_id === n.contact_id) + 1};
+  log("captura", `Email marketing registra <span class="mono">${esc(DATA.raw_email[n.contact_id].email)}</span> abre "${esc(n.detalle)}" el ${esc(n.fecha)} → normalizado → <strong>${esc(n.contact_id)}</strong>. Score ${antes.score} → ${despues.score}.`, "FACT_interacciones", n);
+  S.sel = n.contact_id;
+  return true;
+}
+function registrarAccion(id, resp, accion, nota){
+  const r = evaluar(id);
+  const row = {accion_id:nextId(S.acciones, "accion_id", "A-", 3), contact_id:id, fecha:S.fechaRef, segmento:`${r.rec} / ${r.val}`, prioridad:r.score, recomendacion:accion + (nota ? ` (${nota})` : ""), responsable:resp, estado:"pendiente", resultado:"", fecha_resultado:""};
+  S.acciones.push(row); S.nuevos.add(row.accion_id);
+  log("accion", `<strong>${esc(r.nombre)}</strong>: ${esc(resp)} decide "${esc(accion)}". Registrada como ${esc(row.accion_id)} (pendiente).`, "FACT_acciones", row);
+  return row;
+}
+function registrarResultado(accion_id, tipo, extra = {}){
+  const a = S.acciones.find(x => x.accion_id === accion_id); if (!a) return;
+  const antes = evaluar(a.contact_id);
+  let texto = "";
+  if (tipo === "compra"){
+    const t = {transaccion_id:nextId(S.transacciones, "transaccion_id", "P-", 4), contact_id:a.contact_id, fecha:S.fechaRef, producto:extra.producto || "Pack regalo cosmética", importe:Number(extra.importe || 0), estado:"entregado"};
+    S.transacciones.push(t); S.nuevos.add(t.transaccion_id); texto = `Compra ${t.transaccion_id} (${eur(t.importe)})`;
+    log("resultado", `Entra un pedido nuevo en la tienda → ${esc(a.contact_id)}.`, "FACT_transacciones", t);
+  } else if (tipo === "ticket"){
+    S.incidencias.filter(i => i.contact_id === a.contact_id && i.estado === "abierto").forEach(i => { i.estado = "resuelto"; i.fecha_cierre = S.fechaRef; i.valoracion = Number(extra.valoracion || 4); S.nuevos.add(i.ticket_id + "c"); texto = `Incidencia ${i.ticket_id} resuelta, valoración ${i.valoracion}/5`; log("resultado", `Soporte cierra ${esc(i.ticket_id)} con valoración ${i.valoracion}/5 (actualizar fila en FACT_incidencias).`, "FACT_incidencias", i); });
+    if (!texto) texto = "Sin incidencia abierta que cerrar";
+  } else if (tipo === "baja"){
+    const c = S.clientes.find(x => x.contact_id === a.contact_id); c.consentimiento = "no";
+    const i = {interaccion_id:nextId(S.interacciones, "interaccion_id", "I-", 3), contact_id:a.contact_id, fecha:S.fechaRef, canal:"whatsapp", evento:"baja_comunicaciones", detalle:"Respuesta a la acción " + a.accion_id, resultado:"consentimiento retirado", fuente:"manual"};
+    S.interacciones.push(i); S.nuevos.add(i.interaccion_id); texto = "Pide no recibir más comunicaciones";
+    log("resultado", `${esc(c.nombre)} retira el consentimiento. DIM_clientes.consentimiento_marketing = no.`, "FACT_interacciones", i);
+  } else { texto = "Sin respuesta"; }
+  a.estado = "cerrada"; a.resultado = texto; a.fecha_resultado = S.fechaRef; S.nuevos.add(a.accion_id + "r");
+  const despues = evaluar(a.contact_id);
+  log("resultado", `${esc(a.accion_id)} cerrada: "${esc(texto)}". ${esc(despues.nombre)} pasa de <strong>${esc(antes.rec)}</strong> (${esc(antes.reco)}) a <strong>${esc(despues.rec)}</strong> (${esc(despues.reco)}).`, "FACT_acciones", a);
+  S.sel = a.contact_id;
+  return {antes, despues};
+}
+
+// ---------- Historias ----------
+const STORIES = [
+  {id:"A", title:"Historia A · Lucía Ferrer (C001)", sub:"La clienta valiosa que se ha enfriado", steps:[
+    {t:"Situación inicial: 3 pedidos en 12 meses, última compra hace 110 días. Inactiva, valor Alto, score 6.", go:"#activacion", run:() => { S.sel = "C001"; }},
+    {t:"Entra un dato nuevo: la plataforma de email registra que lucia.ferrer abre la campaña Otoño. Se normaliza y se vincula a C001.", go:"#interpretacion", run:() => addNuevoDato()},
+    {t:"La regla reinterpreta: engagement reciente → score 7. Pasa a ser la primera de la cola. Recomendación: WhatsApp personal + cupón 15 %.", go:"#activacion", run:() => { S.sel = "C001"; }},
+    {t:"Decisión: Atención al cliente la llama y le ofrece el cupón. Queda registrada como acción pendiente.", go:"#activacion", run:() => registrarAccion("C001", "Atención al cliente", "WhatsApp personal + cupón 15 %", "la llama Marta el jueves")},
+    {t:"Resultado: Lucía compra un pack regalo por 68 €. El pedido entra en FACT_transacciones, la acción se cierra y la regla la pasa a Activo.", go:"#resultado", run:() => { const a = S.acciones.filter(x => x.contact_id === "C001" && x.estado === "pendiente").at(-1); if (a) registrarResultado(a.accion_id, "compra", {producto:"Pack regalo cosmética", importe:68}); }},
+  ]},
+  {id:"B", title:"Historia B · Marcos Vidal (C002)", sub:"El inactivo al que no hay que venderle nada todavía", steps:[
+    {t:"Situación inicial: 95 días sin comprar, valor Medio. Por recencia sería candidato a cupón. Pero su último pedido llegó roto y el ticket T-303 sigue abierto.", go:"#activacion", run:() => { S.sel = "C002"; }},
+    {t:"La regla bloquea la oferta: 'Resolver incidencia antes de ofertar'. Responsable: Soporte, no Marketing. Mismo dato de inactividad, respuesta distinta.", go:"#activacion", run:() => { S.sel = "C002"; }},
+    {t:"Decisión: Soporte reenvía el pack y pide disculpas. Se registra la acción.", go:"#activacion", run:() => registrarAccion("C002", "Soporte", "Reenviar pedido P-1027 y disculpa", "sin coste")},
+    {t:"Resultado: el ticket se cierra con valoración 4. FACT_incidencias cambia a 'resuelto' y la regla recalcula: ahora sí, email con cupón 10 %.", go:"#resultado", run:() => { const a = S.acciones.filter(x => x.contact_id === "C002" && x.estado === "pendiente").at(-1); if (a) registrarResultado(a.accion_id, "ticket", {valoracion:4}); }},
+    {t:"Siguiente ciclo: con la incidencia cerrada, Marketing puede registrar la nueva acción recomendada. El CRM ha aprendido del resultado.", go:"#activacion", run:() => { S.sel = "C002"; }},
+  ]},
+];
+const storyPos = {A:-1, B:-1};
+function renderStories(){
+  $("#storyGrid").innerHTML = STORIES.map(s => `<div class="story"><div><h3>${esc(s.title)}</h3><p class="note">${esc(s.sub)}</p></div>
+    <ol>${s.steps.map((st, i) => `<li class="${i < storyPos[s.id] ? "done" : i === storyPos[s.id] ? "cur" : ""}">${esc(st.t)}</li>`).join("")}</ol>
+    <div class="ctl"><button class="btn" type="button" data-story="${s.id}" data-act="next" ${storyPos[s.id] >= s.steps.length - 1 ? "disabled" : ""}>${storyPos[s.id] < 0 ? "Empezar historia" : "Siguiente paso"}</button><button class="btn secondary" type="button" data-story="${s.id}" data-act="reset">Reiniciar historia</button></div>
+    <div class="out">${storyPos[s.id] < 0 ? "Pulsa Empezar: cada paso modifica los datos de la app y te lleva a la sección donde se ve." : esc(s.steps[storyPos[s.id]].t)}</div></div>`).join("");
+}
+
+// ---------- Importación ----------
+function parseDelimited(text){
+  const lines = text.replace(/\r/g, "").split("\n").filter(l => l.trim() !== "");
+  if (!lines.length) return [];
+  const delim = lines[0].includes("\t") ? "\t" : (lines[0].split(";").length > lines[0].split(",").length ? ";" : ",");
+  const split = (line) => { const out = []; let cur = "", q = false; for (let i = 0; i < line.length; i++){ const ch = line[i]; if (ch === '"'){ if (q && line[i + 1] === '"'){ cur += '"'; i++; } else q = !q; } else if (ch === delim && !q){ out.push(cur); cur = ""; } else cur += ch; } out.push(cur); return out.map(s => s.trim()); };
+  const header = split(lines[0]).map(h => h.toLowerCase());
+  return lines.slice(1).map(l => { const v = split(l); const o = {}; header.forEach((h, i) => o[h] = v[i] ?? ""); return o; });
+}
+const REQ = {clientes:["contact_id", "nombre", "email", "origen", "fecha_alta"], transacciones:["transaccion_id", "contact_id", "fecha", "producto", "importe", "estado"], interacciones:["interaccion_id", "contact_id", "fecha", "canal", "evento"], incidencias:["ticket_id", "contact_id", "fecha_apertura", "estado"], acciones:["accion_id", "contact_id", "fecha", "recomendacion", "responsable", "estado"]};
+function importar(tabla, text){
+  const rows = parseDelimited(text);
+  const missing = REQ[tabla].filter(k => !rows.length || !(k in rows[0]));
+  if (!rows.length) return "No se han encontrado filas. Pega la pestaña completa, con la fila de encabezados.";
+  if (missing.length) return "Faltan columnas: " + missing.join(", ") + ". Los encabezados deben ser los de la pestaña " + WH.find(w => w.k === tabla).t + ".";
+  const norm = (d) => { d = String(d).trim(); const m = d.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : d.slice(0, 10); };
+  rows.forEach(r => { ["fecha", "fecha_alta", "fecha_apertura", "fecha_cierre", "fecha_resultado"].forEach(k => { if (k in r && r[k]) r[k] = norm(r[k]); }); if ("importe" in r) r.importe = Number(String(r.importe).replace(/[€\s]/g, "").replace(",", ".")) || 0; if ("consentimiento_marketing" in r && !("consentimiento" in r)) r.consentimiento = r.consentimiento_marketing; if ("prioridad" in r) r.prioridad = Number(r.prioridad) || 0; });
+  S[tabla] = rows; S.nuevos.clear(); S.lastDiff = null;
+  if (tabla === "clientes" && !S.clientes.some(c => c.contact_id === S.sel)) S.sel = S.clientes[0]?.contact_id || "";
+  log("datos", `Tabla ${esc(WH.find(w => w.k === tabla).t)} cargada desde la hoja: ${rows.length} filas.`);
+  return `Cargadas ${rows.length} filas en ${WH.find(w => w.k === tabla).t}. La regla y la ficha ya usan los datos de la hoja.`;
+}
+
+// ---------- Eventos ----------
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("button, tr[data-id]"); if (!b) return;
+  if (b.closest("#rawTabs")){ rawSel = b.dataset.k; renderRaw(); return; }
+  if (b.closest("#whTabs")){ whSel = b.dataset.k; renderWh(); return; }
+  if (b.id === "btnReset"){ reset(); storyPos.A = storyPos.B = -1; renderAll(); toast("Datos de ejemplo restaurados"); return; }
+  if (b.id === "btnNuevoDato"){ if (addNuevoDato()){ renderAll(); toast("Dato nuevo vinculado a C001"); } return; }
+  if (b.id === "accManual"){ registrarAccion(S.sel, "Marketing", "Acción manual decidida por el equipo", "justificar en el vídeo"); renderAll(); toast("Acción manual registrada"); return; }
+  if (b.matches("tr[data-id]")){ S.sel = b.dataset.id; renderAll(); document.querySelector("#activacion").scrollIntoView({behavior:"smooth", block:"start"}); return; }
+  if (b.dataset.copy !== undefined){ const l = S.log[Number(b.dataset.copy)]; const ok = () => toast("Fila copiada: pégala en " + l.tabla); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(l.tsv).then(ok).catch(() => { toast("No se pudo copiar automáticamente: selecciona la fila y cópiala a mano"); }); else toast("Selecciona la fila y cópiala a mano"); return; }
+  if (b.dataset.story){ const s = STORIES.find(x => x.id === b.dataset.story); if (b.dataset.act === "reset"){ storyPos[s.id] = -1; renderStories(); return; } const next = storyPos[s.id] + 1; if (next >= s.steps.length) return; storyPos[s.id] = next; const st = s.steps[next]; st.run(); renderAll(); document.querySelector(st.go).scrollIntoView({behavior:"smooth", block:"start"}); return; }
+});
+document.addEventListener("submit", (e) => {
+  if (e.target.id === "accForm"){ e.preventDefault(); const f = new FormData(e.target); registrarAccion(S.sel, f.get("resp"), f.get("accion"), f.get("nota")); renderAll(); toast("Acción registrada como pendiente"); document.querySelector("#resultado").scrollIntoView({behavior:"smooth", block:"start"}); }
+  if (e.target.id === "resForm"){ e.preventDefault(); const f = new FormData(e.target); const d = registrarResultado(f.get("accion"), f.get("tipo"), {producto:f.get("producto"), importe:f.get("importe"), valoracion:f.get("valoracion")}); renderAll(); if (d){ $("#resultadoPanel").insertAdjacentHTML("afterbegin", `<div class="diff"><div>${esc(d.antes.nombre)} antes<br><b>${esc(d.antes.rec)}</b> · ${esc(d.antes.reco)}</div><div>→</div><div>después del resultado<br><b>${esc(d.despues.rec)}</b> · ${esc(d.despues.reco)}</div></div>`); } toast("Resultado registrado: ciclo cerrado"); }
+  if (e.target.id === "importForm"){ e.preventDefault(); const tabla = $("#impTabla").value; const text = $("#impTexto").value; if (!text.trim()){ $("#impMsg").textContent = "Pega el contenido o selecciona un archivo primero."; return; } $("#impMsg").textContent = importar(tabla, text); renderAll(); }
+});
+document.addEventListener("change", (e) => {
+  if (e.target.id === "selCliente"){ S.sel = e.target.value; renderAll(); }
+  if (e.target.id === "impFile" && e.target.files[0]){ const fr = new FileReader(); fr.onload = () => { $("#impTexto").value = fr.result; $("#impMsg").textContent = "Archivo leído. Elige la tabla y pulsa Cargar en la app."; }; fr.readAsText(e.target.files[0], "utf-8"); }
+});
+document.addEventListener("input", (e) => { if (e.target.id === "identInput") renderIdent(); });
+
+reset(); renderAll();
+</script>
+</body>
+</html>

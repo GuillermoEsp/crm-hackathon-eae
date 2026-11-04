@@ -1,0 +1,4 @@
+ticket_id,contact_id,fecha_apertura,motivo,estado,fecha_cierre,valoracion,pedido
+T-301,C004,2025-12-03,Pregunta sobre devolución,resuelto,2025-12-04,3,P-1005
+T-302,C010,2026-06-09,Consulta estado del envío,resuelto,2026-06-10,5,P-1020
+T-303,C002,2026-08-03,Pedido recibido con el envase roto,abierto,,,P-1027

@@ -1,0 +1,16 @@
+interaccion_id,contact_id,fecha,canal,evento,detalle,resultado,fuente
+I-001,C006,2026-04-12,web,resena_producto,Sérum de rosa mosqueta,4 estrellas,web
+I-002,C006,2026-07-05,email,email_clic,Campaña Verano 2026,clic en producto,email_marketing
+I-003,C001,2026-07-06,email,email_abierto,Campaña Verano 2026,abierto,email_marketing
+I-004,C009,2026-07-08,email,email_abierto,Campaña Verano 2026,abierto,email_marketing
+I-005,C008,2026-07-31,email,email_abierto,Campaña Verano 2026,abierto,email_marketing
+I-006,C004,2026-08-20,email,email_enviado,Campaña genérica Q3,no abierto,email_marketing
+I-007,C006,2026-08-20,email,email_enviado,Recordatorio reposición,abierto,email_marketing
+I-008,C008,2026-09-18,web,resena_producto,Crema facial de caléndula,5 estrellas,web
+I-009,C003,2026-09-21,web,baja_comunicaciones,Formulario de preferencias,consentimiento retirado,web
+I-010,C001,2026-10-18,email,email_enviado,Campaña Otoño 2026,pendiente,email_marketing
+I-011,C002,2026-10-18,email,email_enviado,Campaña Otoño 2026,no abierto,email_marketing
+I-012,C007,2026-10-18,email,email_enviado,Campaña Otoño 2026,no abierto,email_marketing
+I-013,C005,2026-10-19,email,email_clic,Campaña Otoño 2026,clic en producto,email_marketing
+I-014,C006,2026-10-20,email,email_abierto,Campaña Otoño 2026,abierto,email_marketing
+I-015,C009,2026-10-28,email,email_abierto,Campaña Otoño 2026,abierto,email_marketing

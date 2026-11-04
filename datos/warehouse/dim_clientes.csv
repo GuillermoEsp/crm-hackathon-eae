@@ -1,0 +1,11 @@
+contact_id,nombre,email,origen,fecha_alta,consentimiento_marketing
+C001,Lucía Ferrer,lucia.ferrer@ejemplo.es,instagram,2025-03-12,si
+C002,Marcos Vidal,marcos.vidal@ejemplo.es,google,2025-06-02,si
+C003,Elena Soto,elena.soto@ejemplo.es,referido,2025-09-20,no
+C004,Jorge Pardo,jorge.pardo@ejemplo.es,google,2024-11-15,si
+C005,Aina Roca,aina.roca@ejemplo.es,instagram,2026-01-10,si
+C006,Pablo Núñez,pablo.nunez@ejemplo.es,newsletter,2025-02-05,si
+C007,Carla Ibáñez,carla.ibanez@ejemplo.es,instagram,2025-05-30,si
+C008,Tomás Gil,tomas.gil@ejemplo.es,referido,2025-08-08,si
+C009,Nerea Alonso,nerea.alonso@ejemplo.es,google,2025-04-22,si
+C010,Diego Mora,diego.mora@ejemplo.es,instagram,2026-02-14,si

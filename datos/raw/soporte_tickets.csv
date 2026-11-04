@@ -1,0 +1,4 @@
+ticket_id,requester_email,created_at,subject,status,closed_at,csat,order_ref
+T-301,jorge.pardo@ejemplo.es,2025-12-03,Pregunta sobre devolución,resuelto,2025-12-04,3,P-1005
+T-302,Diego.Mora@ejemplo.es,2026-06-09,Consulta estado del envío,resuelto,2026-06-10,5,P-1020
+T-303,marcos.vidal@ejemplo.es ,2026-08-03,Pedido recibido con el envase roto,abierto,,,P-1027

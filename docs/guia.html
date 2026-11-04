@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía CRM Verdelia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F6F2;--surface:#FFFFFF;--surface-2:#E9EFE9;--ink:#1C2822;--muted:#5C6963;--line:#D3DBD3;--accent:#1F5F5B;--accent-soft:#DAEBE6;--raw:#8A6A3F;
+--font-display:"Fraunces",Georgia,serif;--font-body:"Source Sans 3","Helvetica Neue",Arial,sans-serif;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121917;--surface:#1A2320;--surface-2:#222E29;--ink:#E4ECE6;--muted:#98A79F;--line:#2C3A33;--accent:#72C4B6;--accent-soft:#1E3A36;--raw:#D1B07C;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121917;--surface:#1A2320;--surface-2:#222E29;--ink:#E4ECE6;--muted:#98A79F;--line:#2C3A33;--accent:#72C4B6;--accent-soft:#1E3A36;--raw:#D1B07C;color-scheme:dark}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 60px}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;text-wrap:balance;line-height:1.15} h1{font-size:2.1rem;margin:0 0 6px} h2{font-size:1.5rem;margin:40px 0 10px;padding-top:14px;border-top:1px solid var(--line)} h3{font-size:1.15rem;margin:22px 0 6px}
+p,li{max-width:72ch} a{color:var(--accent)} code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+pre{background:var(--surface-2);padding:14px;border-radius:10px;overflow-x:auto;font-size:.82rem;line-height:1.35} pre code{background:none;padding:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin:12px 0} table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top} th{background:var(--surface-2);font-weight:600} tr:last-child td{border-bottom:0}
+.lead{color:var(--muted);margin:0 0 20px} .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:600;background:var(--accent-soft);color:var(--accent)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 8px} nav a{text-decoration:none;font-size:.9rem;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
+blockquote{margin:0;padding:8px 14px;border-left:4px solid var(--accent);background:var(--surface-2);border-radius:0 8px 8px 0}
+</style></head><body><div class="wrap">
+<span class="tag">Hackathon CRM Data Driven · EAE</span>
+<nav><a href="#guia">Guía del reto</a><a href="#guion">Guion del vídeo</a></nav>
+<section id="guia"><h1>CRM Verdelia · Guía del reto (Hackathon CRM Data Driven, EAE)</h1>
+<p>Todo lo que el equipo necesita para construir, entender y demostrar el CRM. Los datos son ficticios.</p>
+<h2>1. Caso de negocio (lo que hay que decir en los primeros 30 segundos)</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Decisión del equipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empresa</td>
+<td><strong>Verdelia</strong>, tienda online de cosmética natural (ficticia). Vende por web, hace email marketing y atiende soporte por tickets.</td>
+</tr>
+<tr>
+<td>Cliente</td>
+<td>Compradores particulares (B2C) con cuenta en la web.</td>
+</tr>
+<tr>
+<td>Problema</td>
+<td><strong>Recuperar clientes inactivos</strong>: personas que compraron y llevan más de 90 días sin volver.</td>
+</tr>
+<tr>
+<td>Decisión que apoya el CRM</td>
+<td><em>¿A qué clientes inactivos contactamos esta semana, con qué oferta y por qué canal? ¿Y a cuáles no?</em></td>
+</tr>
+<tr>
+<td>Acción posterior</td>
+<td>WhatsApp personal con cupón, email con cupón, email sin cupón, recordatorio, campaña genérica, resolver incidencia primero, o no contactar.</td>
+</tr>
+<tr>
+<td>Valor esperado</td>
+<td>Concentrar el esfuerzo (y el descuento) en quien más vale y está receptivo; no molestar a quien tiene una queja abierta o ha retirado el consentimiento.</td>
+</tr>
+</tbody>
+</table></div>
+<h2>2. Arquitectura: el recorrido del dato en cinco pasos</h2>
+<pre><code> FUENTES (raw)            WAREHOUSE                 INTERPRETACIÓN        ACTIVACIÓN           RESULTADO
+ tienda_pedidos.csv  ─┐                            
+ web_registros.csv   ─┤  normalizar email ─▶ DIM_clientes (contact_id)
+ email_eventos.csv   ─┼▶ fecha a ISO       ─▶ FACT_transacciones  ─▶ REGLA (score,   ─▶ Ficha 360 ─▶  FACT_acciones
+ web_eventos.csv     ─┤  importe a número  ─▶ FACT_interacciones      segmento,        decisión +     (resultado) ──┐
+ soporte_tickets.csv ─┘  asignar contact_id─▶ FACT_incidencias        recomendación)   acción                        │
+                                              ▲                                                                       │
+                                              └───────────── el resultado vuelve como transacción / ticket / baja ────┘
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Paso</th>
+<th>Qué ocurre</th>
+<th>Dónde se ve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 Captura</td>
+<td>Cada sistema escribe con su formato: la tienda usa <code>dd/mm/aaaa</code> e importes con coma, el email marketing timestamps ISO, soporte deja espacios en los correos. No se toca nada: es el <strong>Data Lake</strong> (zona raw).</td>
+<td>Pestañas <code>RAW_*</code> de la hoja · sección 1 de la app · carpeta <code>datos/raw/</code></td>
+</tr>
+<tr>
+<td>2 Identificación</td>
+<td>Se normaliza el email (<code>trim</code> + minúsculas), se busca en <code>DIM_clientes</code> y se asigna el <code>contact_id</code>. Fechas e importes se estandarizan. Es el <strong>Data Warehouse</strong>: tablas limpias relacionadas por una clave.</td>
+<td>Pestañas <code>DIM_clientes</code>, <code>FACT_*</code> · sección 2 de la app · <code>datos/warehouse/</code></td>
+</tr>
+<tr>
+<td>3 Interpretación</td>
+<td>Una regla calcula por cliente cuatro señales + consentimiento y produce segmento, score (0-7) y recomendación.</td>
+<td>Pestaña <code>REGLA</code> · sección 3 de la app</td>
+</tr>
+<tr>
+<td>4 Activación</td>
+<td>La ficha 360 reúne perfil, situación e historial. Una persona decide y registra la acción en <code>FACT_acciones</code> (estado <code>pendiente</code>).</td>
+<td>Pestaña <code>FICHA_360</code> · sección 4 de la app</td>
+</tr>
+<tr>
+<td>5 Resultado</td>
+<td>Lo que pasó vuelve al CRM: una compra entra como transacción, un ticket se cierra, una baja retira el consentimiento. La acción se cierra con su resultado y la regla se recalcula.</td>
+<td><code>FACT_acciones</code>, <code>FACT_transacciones</code>, <code>FACT_incidencias</code> · sección 5 de la app</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Por qué dos capas.</strong> Si la regla leyera directamente las fuentes, tendría que entender cinco formatos distintos y cuatro maneras de escribir un email. Separar raw de warehouse hace que cada dato tenga un único lugar de verdad, una clave común y un formato conocido. El Data Lake conserva la evidencia original; el Data Warehouse responde preguntas.</p>
+<h2>3. Modelo de datos (diccionario)</h2>
+<p>Clave de todo: <code>contact_id</code> (C001…). En las fuentes la clave natural es el email, que no es fiable (mayúsculas, espacios). El warehouse lo normaliza una vez y a partir de ahí todo se relaciona por <code>contact_id</code>.</p>
+<h3>DIM_clientes · ¿Quién es y cuál es su situación?</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Para qué se recoge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>contact_id</td>
+<td>Clave que conecta todas las tablas.</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Ficticio. Para que la responsable sepa a quién llama.</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Normalizado. Es la clave natural con la que llegan los datos de las fuentes.</td>
+</tr>
+<tr>
+<td>origen</td>
+<td>Canal de captación (instagram, google, referido, newsletter). Sirve para la mejora futura: ¿qué origen retiene mejor?</td>
+</tr>
+<tr>
+<td>fecha_alta</td>
+<td>Antigüedad del cliente.</td>
+</tr>
+<tr>
+<td>consentimiento_marketing</td>
+<td><code>si</code>/<code>no</code>. Sin consentimiento la regla no recomienda contacto.</td>
+</tr>
+</tbody>
+</table></div>
+<h3>FACT_transacciones · ¿Qué relación mantiene con la empresa?</h3>
+<p><code>transaccion_id, contact_id, fecha, producto, importe, estado (entregado / devuelto / en incidencia)</code>. Alimenta recencia (última compra) y valor (suma 12 meses).</p>
+<h3>FACT_interacciones · ¿Qué ha ocurrido y cuándo?</h3>
+<p><code>interaccion_id, contact_id, fecha, canal (email/web/whatsapp/llamada), evento, detalle, resultado, fuente</code>. Eventos usados: <code>email_enviado</code>, <code>email_abierto</code>, <code>email_clic</code>, <code>resena_producto</code>, <code>baja_comunicaciones</code>. Alimenta el engagement de 30 días.</p>
+<h3>FACT_incidencias · ¿Tiene un problema abierto?</h3>
+<p><code>ticket_id, contact_id, fecha_apertura, motivo, estado (abierto / resuelto), fecha_cierre, valoracion, pedido</code>. Un ticket abierto bloquea cualquier oferta.</p>
+<h3>FACT_acciones · ¿Qué hacemos a continuación y qué pasó?</h3>
+<p><code>accion_id, contact_id, fecha, segmento, prioridad, recomendacion, responsable, estado (pendiente / ejecutada / cerrada), resultado, fecha_resultado</code>. Es donde el CRM aprende: sin esta tabla no se puede saber si la acción funcionó.</p>
+<h2>4. La regla de reactivación</h2>
+<p>Fecha de referencia ("hoy"): <strong>4 de noviembre de 2026</strong>. Está en <code>PARAMETROS!B2</code>; cambiarla recalcula todo.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Señal</th>
+<th>Cálculo</th>
+<th>Clases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recencia</td>
+<td>Días desde la última compra no devuelta</td>
+<td>Activo ≤ 60 · En riesgo ≤ 90 · Inactivo ≤ 180 · Perdido &gt; 180</td>
+</tr>
+<tr>
+<td>Valor</td>
+<td>Suma de pedidos no devueltos en los últimos 365 días</td>
+<td>Alto ≥ 150 € · Medio ≥ 60 € · Bajo &lt; 60 €</td>
+</tr>
+<tr>
+<td>Engagement</td>
+<td>Abrió o hizo clic en algún email en los últimos 30 días</td>
+<td>sí / no</td>
+</tr>
+<tr>
+<td>Incidencia abierta</td>
+<td>Algún ticket en estado <code>abierto</code></td>
+<td>sí / no</td>
+</tr>
+<tr>
+<td>Consentimiento</td>
+<td>De <code>DIM_clientes</code></td>
+<td>sí / no</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Score (0-7)</strong> = puntos de recencia (Inactivo 3 · En riesgo 2 · Perdido 1 · Activo 0) + puntos de valor (Alto 3 · Medio 2 · Bajo 1) + 1 si hay engagement. Sin consentimiento, 0.</p>
+<p><strong>Recomendación</strong>, evaluada en este orden (la primera que se cumple gana):</p>
+<ol>
+<li>Sin consentimiento → <strong>No contactar</strong>. Responsable: nadie.</li>
+<li>Incidencia abierta → <strong>Resolver incidencia antes de ofertar</strong>. Responsable: Soporte.</li>
+<li>Activo → <strong>Ninguna acción</strong>.</li>
+<li>Inactivo + valor Alto → <strong>WhatsApp personal + cupón 15 %</strong>. Atención al cliente.</li>
+<li>Inactivo + valor Medio → <strong>Email cupón 10 % + producto recomendado</strong>. Marketing.</li>
+<li>Inactivo + valor Bajo → <strong>Email producto recomendado (sin cupón)</strong>. Marketing.</li>
+<li>En riesgo → <strong>Email recordatorio de reposición (sin descuento)</strong>. Marketing.</li>
+<li>Perdido → <strong>Incluir en campaña genérica trimestral</strong>. Marketing.</li>
+</ol>
+<p>Justificación corta para el vídeo: el descuento se reserva para quien más vale (margen), el canal personal para quien justifica el tiempo de una persona, y nadie recibe una oferta con una queja sin resolver ni sin consentimiento.</p>
+<h3>Cola de prioridad con los datos iniciales</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Cliente</th>
+<th>Días</th>
+<th>Valor 12 m</th>
+<th>Email 30 d</th>
+<th>Incidencia</th>
+<th>Consent.</th>
+<th>Segmento</th>
+<th>Score</th>
+<th>Recomendación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C001 Lucía Ferrer</td>
+<td>110</td>
+<td>191 €</td>
+<td>no</td>
+<td>—</td>
+<td>sí</td>
+<td>Inactivo / Alto</td>
+<td>6</td>
+<td>WhatsApp personal + cupón 15 %</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C006 Pablo Núñez</td>
+<td>70</td>
+<td>171 €</td>
+<td>sí</td>
+<td>—</td>
+<td>sí</td>
+<td>En riesgo / Alto</td>
+<td>6</td>
+<td>Email recordatorio reposición</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C002 Marcos Vidal</td>
+<td>95</td>
+<td>113 €</td>
+<td>no</td>
+<td>abierta</td>
+<td>sí</td>
+<td>Inactivo / Medio</td>
+<td>5</td>
+<td>Resolver incidencia antes de ofertar</td>
+</tr>
+<tr>
+<td>4</td>
+<td>C007 Carla Ibáñez</td>
+<td>130</td>
+<td>113 €</td>
+<td>no</td>
+<td>—</td>
+<td>sí</td>
+<td>Inactivo / Medio</td>
+<td>5</td>
+<td>Email cupón 10 % + producto</td>
+</tr>
+<tr>
+<td>5</td>
+<td>C009 Nerea Alonso</td>
+<td>100</td>
+<td>37 €</td>
+<td>sí</td>
+<td>—</td>
+<td>sí</td>
+<td>Inactivo / Bajo</td>
+<td>5</td>
+<td>Email producto (sin cupón)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>C010 Diego Mora</td>
+<td>150</td>
+<td>24 €</td>
+<td>no</td>
+<td>—</td>
+<td>sí</td>
+<td>Inactivo / Bajo</td>
+<td>4</td>
+<td>Email producto (sin cupón)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>C005 Aina Roca</td>
+<td>20</td>
+<td>100 €</td>
+<td>sí</td>
+<td>—</td>
+<td>sí</td>
+<td>Activo / Medio</td>
+<td>3</td>
+<td>Ninguna acción</td>
+</tr>
+<tr>
+<td>8</td>
+<td>C004 Jorge Pardo</td>
+<td>338</td>
+<td>12 €</td>
+<td>no</td>
+<td>—</td>
+<td>sí</td>
+<td>Perdido / Bajo</td>
+<td>2</td>
+<td>Campaña genérica trimestral</td>
+</tr>
+<tr>
+<td>9</td>
+<td>C008 Tomás Gil</td>
+<td>45</td>
+<td>83 €</td>
+<td>no</td>
+<td>—</td>
+<td>sí</td>
+<td>Activo / Medio</td>
+<td>2</td>
+<td>Ninguna acción</td>
+</tr>
+<tr>
+<td>10</td>
+<td>C003 Elena Soto</td>
+<td>107</td>
+<td>61 €</td>
+<td>no</td>
+<td>—</td>
+<td><strong>no</strong></td>
+<td>Inactivo / Medio</td>
+<td>0</td>
+<td>No contactar</td>
+</tr>
+</tbody>
+</table></div>
+<h2>5. Las dos historias (mismo CRM, respuestas distintas)</h2>
+<h3>Historia A · Lucía Ferrer (C001): la clienta valiosa que se ha enfriado</h3>
+<ol>
+<li><strong>Situación</strong>: 3 pedidos en 12 meses (191 €), última compra hace 110 días. Inactiva, valor Alto, score 6.</li>
+<li><strong>Captura</strong>: el 2 de noviembre la plataforma de email registra que <code>lucia.ferrer@ejemplo.es</code> abre la campaña Otoño 2026. En la tienda su email aparece como <code>Lucia.Ferrer@ejemplo.es</code> y en soporte con un espacio delante: es la misma persona.</li>
+<li><strong>Identificación</strong>: <code>trim</code> + minúsculas → se encuentra en <code>DIM_clientes</code> → <code>C001</code>. La fila entra en <code>FACT_interacciones</code> como <code>I-016</code>.</li>
+<li><strong>Interpretación</strong>: engagement pasa a sí → score 7. Primera de la cola. Recomendación: WhatsApp personal + cupón 15 %.</li>
+<li><strong>Activación</strong>: Atención al cliente decide llamarla el jueves. Se registra <code>A-003</code>, pendiente.</li>
+<li><strong>Resultado</strong>: compra un pack regalo (68 €). Entra <code>P-1035</code> en <code>FACT_transacciones</code>, <code>A-003</code> se cierra con "Compra 68 €". La regla la pasa a Activo: ninguna acción más.</li>
+</ol>
+<h3>Historia B · Marcos Vidal (C002): el inactivo al que no hay que venderle nada todavía</h3>
+<ol>
+<li><strong>Situación</strong>: 95 días sin comprar, valor Medio. Solo por recencia sería candidato a cupón.</li>
+<li><strong>Relación</strong>: su último pedido <code>P-1027</code> está "en incidencia" y el ticket <code>T-303</code> (envase roto) sigue abierto desde agosto.</li>
+<li><strong>Interpretación</strong>: la regla bloquea la oferta: "Resolver incidencia antes de ofertar". Responsable: Soporte, no Marketing.</li>
+<li><strong>Activación</strong>: Soporte reenvía el pack y pide disculpas. Se registra <code>A-004</code>.</li>
+<li><strong>Resultado</strong>: el ticket se cierra con valoración 4. <code>FACT_incidencias</code> pasa a <code>resuelto</code>, la regla recalcula y ahora sí recomienda "Email cupón 10 % + producto recomendado". Marketing puede actuar en el siguiente ciclo.</li>
+</ol>
+<p><strong>Moraleja</strong>: el mismo dato (unos 100 días sin comprar) produce acciones distintas porque el CRM relaciona pedidos, soporte y consentimiento bajo un mismo <code>contact_id</code>. Un envío "a todos los inactivos" habría mandado un cupón a Marcos con la queja sin resolver y otro a Elena (C003), que retiró el consentimiento.</p>
+<h2>6. Cómo usar la hoja y la app juntas</h2>
+<ol>
+<li><strong>Google Sheets es la fuente de verdad.</strong> Importad <code>crm_verdelia.xlsx</code> (Archivo → Importar → Subir). Las fórmulas de <code>REGLA</code> y <code>FICHA_360</code> usan <code>IFS</code>, <code>MAXIFS</code>, <code>FILTER</code> y <code>SORT</code>; están pensadas para Google Sheets.</li>
+<li><strong>La app (<code>app/index.html</code>) es la vista de demostración.</strong> Arranca con los mismos datos. Para que use los de vuestra hoja: en la sección "Datos", copiad una pestaña entera de Sheets (Ctrl+A, Ctrl+C), pegadla y pulsad "Cargar en la app". Repetid por tabla.</li>
+<li><strong>Cada cambio que hagáis en la app aparece en "Registro de esta sesión"</strong> con un botón "Copiar fila". Pegad esa fila en la pestaña correspondiente de la hoja (filas amarillas) y veréis cómo <code>REGLA</code> y <code>FICHA_360</code> se recalculan solas.</li>
+<li>Para el vídeo basta con la app, pero enseñar la fila entrando en la hoja y la fórmula recalculándose es la prueba más clara de que el dato recorre todo el camino.</li>
+</ol>
+<p>Regenerar todo desde cero (si cambiáis datos en <code>scripts/generate_data.py</code>):</p>
+<pre><code class="language-bash">python3 scripts/generate_data.py &amp;&amp; python3 scripts/build_xlsx.py &amp;&amp; python3 scripts/build_app.py
+</code></pre>
+<h2>7. Reparto de responsabilidades (6.1 del enunciado)</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Quién</th>
+<th>Qué debe poder explicar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Negocio</td>
+<td></td>
+<td>Por qué recuperar inactivos, la decisión semanal y el valor esperado.</td>
+</tr>
+<tr>
+<td>Datos</td>
+<td></td>
+<td>Las cinco fuentes, por qué se normaliza el email, qué campo alimenta qué señal.</td>
+</tr>
+<tr>
+<td>CRM</td>
+<td></td>
+<td>La ficha 360 y la regla, con la cola de prioridad delante.</td>
+</tr>
+<tr>
+<td>Prueba</td>
+<td></td>
+<td>Las dos historias y el caso de Elena. Que cambiar <code>PARAMETROS</code> cambia la cola.</td>
+</tr>
+<tr>
+<td>Demostración</td>
+<td></td>
+<td>El guion de 4 minutos y la grabación.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Todos deben poder seguir el dato de Lucía de principio a fin sin mirar notas.</p>
+<h2>8. Limitaciones reconocidas y siguiente mejora</h2>
+<p><strong>Limitaciones</strong>
+- La identidad se resuelve solo por email. Dos personas con el mismo correo (o una con dos) se confunden. Un teléfono o un identificador de cliente en la tienda lo mejoraría.
+- Los umbrales (60/90/180 días, 150/60 €) están fijados a mano, no aprendidos de los datos.
+- Acciones y resultados se registran a mano. No hay integración real con WhatsApp ni con la plataforma de email.
+- No se mide causalidad: no sabemos si Lucía habría comprado igual sin la llamada (no hay grupo de control).
+- Solo 10 clientes: suficiente para explicar el flujo, no para validar la regla.</p>
+<p><strong>Siguiente mejora</strong> (elegir una para el vídeo)
+- Cerrar el ciclo de forma automática: que un pedido nuevo en la tienda cierre solo la acción pendiente de ese cliente.
+- Guardar la tasa de respuesta por segmento y acción en <code>FACT_acciones</code> para revisar los umbrales cada trimestre.
+- Regla de "no insistir": tras dos acciones sin respuesta, pausar al cliente seis meses (Jorge ya lleva una).</p>
+<h2>9. Checklist del enunciado, cubierto</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Checklist</th>
+<th>Dónde está</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caso, cliente y decisión definidos</td>
+<td>Sección 1 de esta guía, cabecera de la app</td>
+</tr>
+<tr>
+<td>Datos ficticios con finalidad clara</td>
+<td>Diccionario (sección 3), todos los nombres inventados</td>
+</tr>
+<tr>
+<td>Identificador común</td>
+<td><code>contact_id</code> en todas las tablas; demostración de normalización en la app (sección 2)</td>
+</tr>
+<tr>
+<td>Vista integrada</td>
+<td><code>FICHA_360</code> en la hoja, sección 4 de la app</td>
+</tr>
+<tr>
+<td>Regla de segmentación / prioridad</td>
+<td><code>REGLA</code> en la hoja, sección 3 de la app</td>
+</tr>
+<tr>
+<td>Decisión y acción concreta</td>
+<td><code>FACT_acciones</code> + formulario en la ficha</td>
+</tr>
+<tr>
+<td>Resultado vuelve al CRM</td>
+<td>Sección 5 de la app, filas amarillas de la hoja</td>
+</tr>
+<tr>
+<td>Dos historias con resultados distintos</td>
+<td>Lucía (compra) y Marcos (incidencia primero)</td>
+</tr>
+<tr>
+<td>Grabación autoexplicativa ≤ 4 min</td>
+<td><code>docs/GUION_VIDEO.md</code></td>
+</tr>
+<tr>
+<td>Limitación y mejora</td>
+<td>Sección 8</td>
+</tr>
+</tbody>
+</table></div>
+<h2>10. Rúbrica: dónde se gana cada punto</h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Peso</th>
+<th>Qué enseñar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comprensión del flujo de datos</td>
+<td>35 %</td>
+<td>El dato de Lucía entrando en raw, normalizándose, vinculándose, cambiando el score, generando acción y volviendo como pedido. Enseñar las dos capas.</td>
+</tr>
+<tr>
+<td>Coherencia del modelo CRM</td>
+<td>25 %</td>
+<td>Cinco tablas, una clave, cada campo con una finalidad. La ficha 360.</td>
+</tr>
+<tr>
+<td>Decisión y acción</td>
+<td>20 %</td>
+<td>La cola de prioridad y la recomendación con su "por qué". Que una persona decide.</td>
+</tr>
+<tr>
+<td>Claridad de la demostración</td>
+<td>15 %</td>
+<td>Seguir el guion; una historia completa antes que muchas pantallas.</td>
+</tr>
+<tr>
+<td>Privacidad y reflexión crítica</td>
+<td>5 %</td>
+<td>Datos ficticios, Elena sin consentimiento, limitaciones y mejora.</td>
+</tr>
+</tbody>
+</table></div></section>
+<section id="guion" style="margin-top:50px"><h1>Guion del vídeo · 4 minutos · Verdelia CRM</h1>
+<p>Formato recomendado: grabación de pantalla de la app (y un vistazo a la hoja) con voz en off. Una persona narra cada bloque. Tiempo total objetivo: 3:45, margen de 15 s.</p>
+<p>Antes de grabar: abrir <code>app/index.html</code>, pulsar <strong>Reiniciar datos de ejemplo</strong>, y tener la hoja de Google Sheets abierta en la pestaña <code>FACT_interacciones</code> en otra ventana. Ensayar dos veces con cronómetro.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Tiempo</th>
+<th>Pantalla</th>
+<th>Quién</th>
+<th>Texto (orientativo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0:00–0:25</td>
+<td>Cabecera de la app, recorrido de 5 pasos</td>
+<td>Negocio</td>
+<td>"Somos Verdelia, una tienda online de cosmética natural. Nuestro problema: clientes que compraron y llevan más de 90 días sin volver. La decisión que queremos tomar cada semana es a quién contactamos, con qué oferta y por qué canal. Y a quién no. Para eso hemos construido un CRM mínimo que sigue el dato en cinco pasos."</td>
+</tr>
+<tr>
+<td>0:25–0:55</td>
+<td>Sección 1 (Captura), cambiar entre pestañas Tienda / Email / Soporte</td>
+<td>Datos</td>
+<td>"Los datos nacen en cuatro sistemas que no se ponen de acuerdo: la tienda escribe fechas con barras e importes con coma, el email marketing timestamps, soporte deja espacios en los correos. Esto es nuestro Data Lake: lo guardamos tal cual, sin tocar."</td>
+</tr>
+<tr>
+<td>0:55–1:25</td>
+<td>Sección 2 (Identificación): escribir <code>Lucia.Ferrer@ejemplo.es</code> y luego <code>lucia.ferrer@ejemplo.es</code> en el campo; pestaña DIM_clientes</td>
+<td>Datos</td>
+<td>"Para que todo eso hable de la misma persona, el warehouse normaliza el email y asigna un contact_id. Lucía aparece de tres formas distintas en las fuentes; en el CRM es siempre C001. Cinco tablas: clientes, transacciones, interacciones, incidencias y acciones, todas unidas por esa clave."</td>
+</tr>
+<tr>
+<td>1:25–1:55</td>
+<td>Sección 3 (Interpretación): cola de prioridad</td>
+<td>CRM</td>
+<td>"Con las tablas limpias, una regla calcula por cliente cuatro señales: días sin comprar, valor en doce meses, si abrió un email hace poco y si tiene una incidencia abierta. Más el consentimiento. De ahí sale un score de 0 a 7 y una recomendación. Hoy Lucía y Pablo empatan a 6."</td>
+</tr>
+<tr>
+<td>1:55–2:20</td>
+<td>Pulsar <strong>Entra un dato nuevo</strong>; se ve el "antes / después"; (opcional) pegar la fila en la hoja y ver REGLA recalcular</td>
+<td>Datos</td>
+<td>"Entra un dato nuevo: Lucía abre la campaña de otoño. Se normaliza, se vincula a C001, y el score sube a 7. Ahora es la primera de la cola. Si pegamos la misma fila en la hoja, la fórmula de la pestaña REGLA hace exactamente lo mismo."</td>
+</tr>
+<tr>
+<td>2:20–2:50</td>
+<td>Sección 4 (Ficha 360 de Lucía): KPIs, "por qué", historial; registrar la acción</td>
+<td>CRM</td>
+<td>"Esta es su ficha: perfil, situación, historial completo y la recomendación con su porqué: inactiva, valor alto, receptiva. La regla recomienda; Marta, de atención al cliente, decide llamarla y lo registra como acción pendiente."</td>
+</tr>
+<tr>
+<td>2:50–3:10</td>
+<td>Sección 5 (Resultado): registrar Compra 68 €; ver el "antes / después" y la fila en el registro</td>
+<td>Prueba</td>
+<td>"Dos días después Lucía compra. El pedido entra como transacción, la acción se cierra con su resultado y la regla la pasa a Activo. El ciclo se ha cerrado: la próxima decisión ya sabe que esta acción funcionó."</td>
+</tr>
+<tr>
+<td>3:10–3:35</td>
+<td>Historia B: seleccionar C002 Marcos; mostrar ticket abierto y recomendación "Resolver incidencia"; registrar resultado "Incidencia resuelta" y ver cómo cambia la recomendación</td>
+<td>Prueba</td>
+<td>"Segunda historia. Marcos también lleva 95 días sin comprar, pero su último pedido llegó roto y el ticket sigue abierto. Mismo dato, respuesta distinta: el CRM no le manda un cupón, manda a soporte. Cuando el ticket se cierra, la regla recalcula y ahora sí propone el email. Y Elena, que retiró el consentimiento, no recibe nada."</td>
+</tr>
+<tr>
+<td>3:35–3:55</td>
+<td>Sección "Limitaciones"</td>
+<td>Negocio</td>
+<td>"Principal limitación: identificamos solo por email y los umbrales están puestos a mano. Siguiente mejora: que un pedido nuevo cierre solo la acción pendiente y guardar la tasa de respuesta por segmento para ajustar la regla cada trimestre. Todos los datos son inventados."</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Reglas para que salga bien</h2>
+<ul>
+<li>Una sola historia completa antes que muchas pantallas. Si hay que recortar, se recorta Historia B a 15 segundos (solo el bloqueo por incidencia), nunca el ciclo de Lucía.</li>
+<li>Decir siempre <strong>de dónde viene el dato, a quién pertenece, qué significa y qué decisión cambia</strong>. Son las cuatro cosas que pide el enunciado.</li>
+<li>Nombrar las tablas por su nombre (<code>FACT_interacciones</code>, <code>contact_id</code>): demuestra que entendéis el modelo.</li>
+<li>No vender la herramienta: la app y la hoja hacen lo mismo; lo que se evalúa es el flujo.</li>
+<li>Comprobar que el enlace de la grabación se abre sin permisos antes de entregar.</li>
+</ul></section>
+<p class="lead" style="margin-top:40px">Todos los datos son ficticios. Material complementario: <code>crm_verdelia.xlsx</code> y la app "Verdelia CRM".</p>
+</div></body></html>

@@ -1,0 +1,22 @@
+order_id,customer_email,order_date,product,total_eur,fulfillment_status
+P-1001,JORGE.PARDO@ejemplo.es,20/01/2025,Champú sólido de romero,"24,00",entregado
+P-1003,Lucia.Ferrer@ejemplo.es,20/11/2025,Pack aceites esenciales,"62,00",entregado
+P-1004,pablo.nunez@ejemplo.es,28/11/2025,Pack aceites esenciales,"71,00",entregado
+P-1005,JORGE.PARDO@ejemplo.es,01/12/2025,Bálsamo labial de karité,"12,00",entregado
+P-1008,marcos.vidal@ejemplo.es,15/01/2026,Champú sólido de romero,"24,00",entregado
+P-1011,Lucia.Ferrer@ejemplo.es,02/03/2026,Crema facial de caléndula,"58,00",entregado
+P-1012,carla.ibanez@ejemplo.es,15/03/2026,Champú sólido de romero,"24,00",entregado
+P-1014,nerea.alonso@ejemplo.es,28/03/2026,Bálsamo labial de karité,"12,00",entregado
+P-1016,pablo.nunez@ejemplo.es,10/04/2026,Sérum de rosa mosqueta,"42,00",entregado
+P-1019,aina.roca@ejemplo.es,05/05/2026,Sérum de rosa mosqueta,"42,00",entregado
+P-1020,diego.mora@ejemplo.es,07/06/2026,Champú sólido de romero,"24,00",entregado
+P-1022,elena.soto@ejemplo.es,10/06/2026,Crema corporal de almendra,"36,00",entregado
+P-1021,carla.ibanez@ejemplo.es,27/06/2026,Pack regalo cosmética,"89,00",entregado
+P-1024,Lucia.Ferrer@ejemplo.es,17/07/2026,Pack regalo cosmética,"71,00",entregado
+P-1025,elena.soto@ejemplo.es,20/07/2026,Jabones artesanales (x3),"25,00",entregado
+P-1023,nerea.alonso@ejemplo.es,27/07/2026,Jabones artesanales (x3),"25,00",entregado
+P-1026,Tomas.Gil@ejemplo.es,30/07/2026,Crema facial de caléndula,"58,00",entregado
+P-1027,marcos.vidal@ejemplo.es,01/08/2026,Pack regalo cosmética,"89,00",en incidencia
+P-1029,pablo.nunez@ejemplo.es,26/08/2026,Crema facial de caléndula,"58,00",entregado
+P-1033,Tomas.Gil@ejemplo.es,20/09/2026,Jabones artesanales (x3),"25,00",entregado
+P-1034,aina.roca@ejemplo.es,15/10/2026,Crema facial de caléndula,"58,00",entregado

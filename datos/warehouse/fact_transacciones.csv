@@ -1,0 +1,22 @@
+transaccion_id,contact_id,fecha,producto,importe,estado
+P-1001,C004,2025-01-20,Champú sólido de romero,24.0,entregado
+P-1003,C001,2025-11-20,Pack aceites esenciales,62.0,entregado
+P-1004,C006,2025-11-28,Pack aceites esenciales,71.0,entregado
+P-1005,C004,2025-12-01,Bálsamo labial de karité,12.0,entregado
+P-1008,C002,2026-01-15,Champú sólido de romero,24.0,entregado
+P-1011,C001,2026-03-02,Crema facial de caléndula,58.0,entregado
+P-1012,C007,2026-03-15,Champú sólido de romero,24.0,entregado
+P-1014,C009,2026-03-28,Bálsamo labial de karité,12.0,entregado
+P-1016,C006,2026-04-10,Sérum de rosa mosqueta,42.0,entregado
+P-1019,C005,2026-05-05,Sérum de rosa mosqueta,42.0,entregado
+P-1020,C010,2026-06-07,Champú sólido de romero,24.0,entregado
+P-1022,C003,2026-06-10,Crema corporal de almendra,36.0,entregado
+P-1021,C007,2026-06-27,Pack regalo cosmética,89.0,entregado
+P-1024,C001,2026-07-17,Pack regalo cosmética,71.0,entregado
+P-1025,C003,2026-07-20,Jabones artesanales (x3),25.0,entregado
+P-1023,C009,2026-07-27,Jabones artesanales (x3),25.0,entregado
+P-1026,C008,2026-07-30,Crema facial de caléndula,58.0,entregado
+P-1027,C002,2026-08-01,Pack regalo cosmética,89.0,en incidencia
+P-1029,C006,2026-08-26,Crema facial de caléndula,58.0,entregado
+P-1033,C008,2026-09-20,Jabones artesanales (x3),25.0,entregado
+P-1034,C005,2026-10-15,Crema facial de caléndula,58.0,entregado

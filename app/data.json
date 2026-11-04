@@ -1,0 +1,536 @@
+{
+  "fecha_referencia": "2026-11-04",
+  "umbrales": {
+    "activo_max": 60,
+    "riesgo_max": 90,
+    "inactivo_max": 180,
+    "valor_alto": 150,
+    "valor_medio": 60,
+    "ventana_valor_dias": 365,
+    "ventana_engagement_dias": 30
+  },
+  "clientes": [
+    {
+      "contact_id": "C001",
+      "nombre": "Lucía Ferrer",
+      "email": "lucia.ferrer@ejemplo.es",
+      "origen": "instagram",
+      "fecha_alta": "2025-03-12",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C002",
+      "nombre": "Marcos Vidal",
+      "email": "marcos.vidal@ejemplo.es",
+      "origen": "google",
+      "fecha_alta": "2025-06-02",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C003",
+      "nombre": "Elena Soto",
+      "email": "elena.soto@ejemplo.es",
+      "origen": "referido",
+      "fecha_alta": "2025-09-20",
+      "consentimiento": "no"
+    },
+    {
+      "contact_id": "C004",
+      "nombre": "Jorge Pardo",
+      "email": "jorge.pardo@ejemplo.es",
+      "origen": "google",
+      "fecha_alta": "2024-11-15",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C005",
+      "nombre": "Aina Roca",
+      "email": "aina.roca@ejemplo.es",
+      "origen": "instagram",
+      "fecha_alta": "2026-01-10",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C006",
+      "nombre": "Pablo Núñez",
+      "email": "pablo.nunez@ejemplo.es",
+      "origen": "newsletter",
+      "fecha_alta": "2025-02-05",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C007",
+      "nombre": "Carla Ibáñez",
+      "email": "carla.ibanez@ejemplo.es",
+      "origen": "instagram",
+      "fecha_alta": "2025-05-30",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C008",
+      "nombre": "Tomás Gil",
+      "email": "tomas.gil@ejemplo.es",
+      "origen": "referido",
+      "fecha_alta": "2025-08-08",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C009",
+      "nombre": "Nerea Alonso",
+      "email": "nerea.alonso@ejemplo.es",
+      "origen": "google",
+      "fecha_alta": "2025-04-22",
+      "consentimiento": "si"
+    },
+    {
+      "contact_id": "C010",
+      "nombre": "Diego Mora",
+      "email": "diego.mora@ejemplo.es",
+      "origen": "instagram",
+      "fecha_alta": "2026-02-14",
+      "consentimiento": "si"
+    }
+  ],
+  "raw_email": {
+    "C001": {
+      "tienda": "Lucia.Ferrer@ejemplo.es",
+      "email": "lucia.ferrer@ejemplo.es",
+      "soporte": " lucia.ferrer@ejemplo.es"
+    },
+    "C002": {
+      "tienda": "marcos.vidal@ejemplo.es",
+      "email": "Marcos.Vidal@ejemplo.es",
+      "soporte": "marcos.vidal@ejemplo.es "
+    },
+    "C003": {
+      "tienda": "elena.soto@ejemplo.es",
+      "email": "elena.soto@ejemplo.es",
+      "soporte": "elena.soto@ejemplo.es"
+    },
+    "C004": {
+      "tienda": "JORGE.PARDO@ejemplo.es",
+      "email": "jorge.pardo@ejemplo.es",
+      "soporte": "jorge.pardo@ejemplo.es"
+    },
+    "C005": {
+      "tienda": "aina.roca@ejemplo.es",
+      "email": "aina.roca@ejemplo.es",
+      "soporte": "aina.roca@ejemplo.es"
+    },
+    "C006": {
+      "tienda": "pablo.nunez@ejemplo.es",
+      "email": "Pablo.Nunez@Ejemplo.es",
+      "soporte": "pablo.nunez@ejemplo.es"
+    },
+    "C007": {
+      "tienda": "carla.ibanez@ejemplo.es",
+      "email": "carla.ibanez@ejemplo.es",
+      "soporte": "carla.ibanez@ejemplo.es"
+    },
+    "C008": {
+      "tienda": "Tomas.Gil@ejemplo.es",
+      "email": "tomas.gil@ejemplo.es",
+      "soporte": "tomas.gil@ejemplo.es"
+    },
+    "C009": {
+      "tienda": "nerea.alonso@ejemplo.es",
+      "email": "nerea.alonso@ejemplo.es",
+      "soporte": "nerea.alonso@ejemplo.es"
+    },
+    "C010": {
+      "tienda": "diego.mora@ejemplo.es",
+      "email": "diego.mora@ejemplo.es",
+      "soporte": "Diego.Mora@ejemplo.es"
+    }
+  },
+  "transacciones": [
+    {
+      "transaccion_id": "P-1001",
+      "contact_id": "C004",
+      "fecha": "2025-01-20",
+      "producto": "Champú sólido de romero",
+      "importe": 24.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1003",
+      "contact_id": "C001",
+      "fecha": "2025-11-20",
+      "producto": "Pack aceites esenciales",
+      "importe": 62.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1004",
+      "contact_id": "C006",
+      "fecha": "2025-11-28",
+      "producto": "Pack aceites esenciales",
+      "importe": 71.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1005",
+      "contact_id": "C004",
+      "fecha": "2025-12-01",
+      "producto": "Bálsamo labial de karité",
+      "importe": 12.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1008",
+      "contact_id": "C002",
+      "fecha": "2026-01-15",
+      "producto": "Champú sólido de romero",
+      "importe": 24.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1011",
+      "contact_id": "C001",
+      "fecha": "2026-03-02",
+      "producto": "Crema facial de caléndula",
+      "importe": 58.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1012",
+      "contact_id": "C007",
+      "fecha": "2026-03-15",
+      "producto": "Champú sólido de romero",
+      "importe": 24.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1014",
+      "contact_id": "C009",
+      "fecha": "2026-03-28",
+      "producto": "Bálsamo labial de karité",
+      "importe": 12.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1016",
+      "contact_id": "C006",
+      "fecha": "2026-04-10",
+      "producto": "Sérum de rosa mosqueta",
+      "importe": 42.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1019",
+      "contact_id": "C005",
+      "fecha": "2026-05-05",
+      "producto": "Sérum de rosa mosqueta",
+      "importe": 42.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1020",
+      "contact_id": "C010",
+      "fecha": "2026-06-07",
+      "producto": "Champú sólido de romero",
+      "importe": 24.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1022",
+      "contact_id": "C003",
+      "fecha": "2026-06-10",
+      "producto": "Crema corporal de almendra",
+      "importe": 36.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1021",
+      "contact_id": "C007",
+      "fecha": "2026-06-27",
+      "producto": "Pack regalo cosmética",
+      "importe": 89.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1024",
+      "contact_id": "C001",
+      "fecha": "2026-07-17",
+      "producto": "Pack regalo cosmética",
+      "importe": 71.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1025",
+      "contact_id": "C003",
+      "fecha": "2026-07-20",
+      "producto": "Jabones artesanales (x3)",
+      "importe": 25.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1023",
+      "contact_id": "C009",
+      "fecha": "2026-07-27",
+      "producto": "Jabones artesanales (x3)",
+      "importe": 25.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1026",
+      "contact_id": "C008",
+      "fecha": "2026-07-30",
+      "producto": "Crema facial de caléndula",
+      "importe": 58.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1027",
+      "contact_id": "C002",
+      "fecha": "2026-08-01",
+      "producto": "Pack regalo cosmética",
+      "importe": 89.0,
+      "estado": "en incidencia"
+    },
+    {
+      "transaccion_id": "P-1029",
+      "contact_id": "C006",
+      "fecha": "2026-08-26",
+      "producto": "Crema facial de caléndula",
+      "importe": 58.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1033",
+      "contact_id": "C008",
+      "fecha": "2026-09-20",
+      "producto": "Jabones artesanales (x3)",
+      "importe": 25.0,
+      "estado": "entregado"
+    },
+    {
+      "transaccion_id": "P-1034",
+      "contact_id": "C005",
+      "fecha": "2026-10-15",
+      "producto": "Crema facial de caléndula",
+      "importe": 58.0,
+      "estado": "entregado"
+    }
+  ],
+  "interacciones": [
+    {
+      "interaccion_id": "I-001",
+      "contact_id": "C006",
+      "fecha": "2026-04-12",
+      "canal": "web",
+      "evento": "resena_producto",
+      "detalle": "Sérum de rosa mosqueta",
+      "resultado": "4 estrellas",
+      "fuente": "web"
+    },
+    {
+      "interaccion_id": "I-002",
+      "contact_id": "C006",
+      "fecha": "2026-07-05",
+      "canal": "email",
+      "evento": "email_clic",
+      "detalle": "Campaña Verano 2026",
+      "resultado": "clic en producto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-003",
+      "contact_id": "C001",
+      "fecha": "2026-07-06",
+      "canal": "email",
+      "evento": "email_abierto",
+      "detalle": "Campaña Verano 2026",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-004",
+      "contact_id": "C009",
+      "fecha": "2026-07-08",
+      "canal": "email",
+      "evento": "email_abierto",
+      "detalle": "Campaña Verano 2026",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-005",
+      "contact_id": "C008",
+      "fecha": "2026-07-31",
+      "canal": "email",
+      "evento": "email_abierto",
+      "detalle": "Campaña Verano 2026",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-006",
+      "contact_id": "C004",
+      "fecha": "2026-08-20",
+      "canal": "email",
+      "evento": "email_enviado",
+      "detalle": "Campaña genérica Q3",
+      "resultado": "no abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-007",
+      "contact_id": "C006",
+      "fecha": "2026-08-20",
+      "canal": "email",
+      "evento": "email_enviado",
+      "detalle": "Recordatorio reposición",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-008",
+      "contact_id": "C008",
+      "fecha": "2026-09-18",
+      "canal": "web",
+      "evento": "resena_producto",
+      "detalle": "Crema facial de caléndula",
+      "resultado": "5 estrellas",
+      "fuente": "web"
+    },
+    {
+      "interaccion_id": "I-009",
+      "contact_id": "C003",
+      "fecha": "2026-09-21",
+      "canal": "web",
+      "evento": "baja_comunicaciones",
+      "detalle": "Formulario de preferencias",
+      "resultado": "consentimiento retirado",
+      "fuente": "web"
+    },
+    {
+      "interaccion_id": "I-010",
+      "contact_id": "C001",
+      "fecha": "2026-10-18",
+      "canal": "email",
+      "evento": "email_enviado",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "pendiente",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-011",
+      "contact_id": "C002",
+      "fecha": "2026-10-18",
+      "canal": "email",
+      "evento": "email_enviado",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "no abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-012",
+      "contact_id": "C007",
+      "fecha": "2026-10-18",
+      "canal": "email",
+      "evento": "email_enviado",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "no abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-013",
+      "contact_id": "C005",
+      "fecha": "2026-10-19",
+      "canal": "email",
+      "evento": "email_clic",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "clic en producto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-014",
+      "contact_id": "C006",
+      "fecha": "2026-10-20",
+      "canal": "email",
+      "evento": "email_abierto",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    },
+    {
+      "interaccion_id": "I-015",
+      "contact_id": "C009",
+      "fecha": "2026-10-28",
+      "canal": "email",
+      "evento": "email_abierto",
+      "detalle": "Campaña Otoño 2026",
+      "resultado": "abierto",
+      "fuente": "email_marketing"
+    }
+  ],
+  "interaccion_nueva": {
+    "interaccion_id": "I-016",
+    "contact_id": "C001",
+    "fecha": "2026-11-02",
+    "canal": "email",
+    "evento": "email_abierto",
+    "detalle": "Campaña Otoño 2026",
+    "resultado": "abierto",
+    "fuente": "email_marketing"
+  },
+  "incidencias": [
+    {
+      "ticket_id": "T-301",
+      "contact_id": "C004",
+      "fecha_apertura": "2025-12-03",
+      "motivo": "Pregunta sobre devolución",
+      "estado": "resuelto",
+      "fecha_cierre": "2025-12-04",
+      "valoracion": 3,
+      "pedido": "P-1005"
+    },
+    {
+      "ticket_id": "T-302",
+      "contact_id": "C010",
+      "fecha_apertura": "2026-06-09",
+      "motivo": "Consulta estado del envío",
+      "estado": "resuelto",
+      "fecha_cierre": "2026-06-10",
+      "valoracion": 5,
+      "pedido": "P-1020"
+    },
+    {
+      "ticket_id": "T-303",
+      "contact_id": "C002",
+      "fecha_apertura": "2026-08-03",
+      "motivo": "Pedido recibido con el envase roto",
+      "estado": "abierto",
+      "fecha_cierre": "",
+      "valoracion": "",
+      "pedido": "P-1027"
+    }
+  ],
+  "acciones": [
+    {
+      "accion_id": "A-001",
+      "contact_id": "C006",
+      "fecha": "2026-08-20",
+      "segmento": "En riesgo / Alto",
+      "prioridad": 5,
+      "recomendacion": "Email recordatorio reposición (sin descuento)",
+      "responsable": "Marketing",
+      "estado": "cerrada",
+      "resultado": "Compra P-1029 (58 €)",
+      "fecha_resultado": "2026-08-26"
+    },
+    {
+      "accion_id": "A-002",
+      "contact_id": "C004",
+      "fecha": "2026-08-20",
+      "segmento": "Perdido / Bajo",
+      "prioridad": 2,
+      "recomendacion": "Incluir en campaña genérica trimestral",
+      "responsable": "Marketing",
+      "estado": "cerrada",
+      "resultado": "Sin respuesta",
+      "fecha_resultado": "2026-09-20"
+    }
+  ]
+}

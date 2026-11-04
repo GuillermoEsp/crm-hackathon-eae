@@ -1,0 +1,11 @@
+contact_id,nombre,ultima_compra,dias_sin_compra,valor_12m,engagement_30d,incidencia_abierta,consentimiento,recencia,valor,score,recomendacion,responsable
+C001,Lucía Ferrer,2026-07-17,110,191.0,False,False,True,Inactivo,Alto,6,WhatsApp personal + cupón 15 %,Atención al cliente
+C002,Marcos Vidal,2026-08-01,95,113.0,False,True,True,Inactivo,Medio,5,Resolver incidencia antes de ofertar,Soporte
+C003,Elena Soto,2026-07-20,107,61.0,False,False,False,Inactivo,Medio,0,No contactar (sin consentimiento),Nadie
+C004,Jorge Pardo,2025-12-01,338,12.0,False,False,True,Perdido,Bajo,2,Incluir en campaña genérica trimestral,Marketing
+C005,Aina Roca,2026-10-15,20,100.0,True,False,True,Activo,Medio,3,Ninguna acción,Nadie
+C006,Pablo Núñez,2026-08-26,70,171.0,True,False,True,En riesgo,Alto,6,Email recordatorio reposición (sin descuento),Marketing
+C007,Carla Ibáñez,2026-06-27,130,113.0,False,False,True,Inactivo,Medio,5,Email cupón 10 % + producto recomendado,Marketing
+C008,Tomás Gil,2026-09-20,45,83.0,False,False,True,Activo,Medio,2,Ninguna acción,Nadie
+C009,Nerea Alonso,2026-07-27,100,37.0,True,False,True,Inactivo,Bajo,5,Email producto recomendado (sin cupón),Marketing
+C010,Diego Mora,2026-06-07,150,24.0,False,False,True,Inactivo,Bajo,4,Email producto recomendado (sin cupón),Marketing
